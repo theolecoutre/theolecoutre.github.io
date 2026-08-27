@@ -12058,6 +12058,7 @@ window.SUIVI_4L = [
 
 
 
+
 <script>
 const DATA = (window.SUIVI_4L || []).map(r => ({ ...r }));
 const $ = id => document.getElementById(id);
@@ -12359,21 +12360,26 @@ function renduCarte() {
     groups.get(key).push(r);
   });
 
-  // Rayon d'écart (en degrés). ~0.0035° ≈ 350 m — les badges prix font ~80px,
-  // à zoom 6-9 ce rayon sépare sans perdre l'ancrage visuel à la ville.
-  const R = 0.0038;
+  // Écart en PIXELS entre badges d'une même ville (adapté au zoom pour rester visible,
+  // car un rayon en degrés fixe devient <1px aux zooms bas après fitBounds).
+  const zoom = map ? map.getZoom() : 6;
+  const lat0 = rows.length ? rows[0].geo[0] : 46.5;
+  const pxPerDeg = (256 * Math.pow(2, zoom)) / 360 * Math.cos(lat0 * Math.PI / 180) || 1;
+  const GAP = 110; // px entre deux badges prix (~80px de large + marge)
+  const R_deg = GAP / pxPerDeg;
+
   groups.forEach((gp, key) => {
     const [clat, clon] = gp[0].geo;
     const n = gp.length;
     if (n === 1) {
       gp[0]._pos = [clat, clon];
     } else {
-      // Répartition sur un cercle : angles décalés pour éviter les croisements
+      // Répartition sur un cercle, rayon croissant légèrement avec le nombre
+      const rayon = R_deg * (0.7 + 0.22 * n);
       const step = (2 * Math.PI) / n;
       gp.forEach((r, i) => {
         const a = i * step;
-        const off = R * (0.8 + 0.25 * (n % 3));
-        r._pos = [clat + off * Math.cos(a), clon + off * Math.sin(a)];
+        r._pos = [clat + rayon * Math.cos(a), clon + rayon * Math.sin(a)];
       });
     }
   });
