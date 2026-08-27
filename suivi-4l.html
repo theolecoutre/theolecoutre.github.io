@@ -108,11 +108,75 @@
     border-color: var(--line) !important; }
   .leaflet-control-attribution { background: rgba(15,20,32,.8) !important; color: var(--mut) !important; font-size: 10px; }
   .leaflet-control-attribution a { color: var(--info) !important; }
+
+  /* --- Écran de verrouillage (mot de passe) --- */
+  #lock { position: fixed; inset: 0; z-index: 3000; background: linear-gradient(135deg, #1a2337, #0f1420);
+          display: flex; align-items: center; justify-content: center; }
+  #lock.hidden { display: none; }
+  .lock-card { background: var(--card2); border: 1px solid var(--line); border-radius: 16px;
+               padding: 32px 36px; width: 340px; box-shadow: 0 16px 48px rgba(0,0,0,.5); }
+  .lock-card h2 { margin: 0 0 4px; font-size: 20px; color: var(--txt); }
+  .lock-card .sub { color: var(--mut); font-size: 12.5px; margin-bottom: 20px; }
+  .lock-card input { width: 100%; background: var(--bg); color: var(--txt); border: 1px solid var(--line);
+    border-radius: 10px; padding: 12px 14px; font-size: 15px; outline: none; box-sizing: border-box; }
+  .lock-card input:focus { border-color: var(--acc); }
+  .lock-card .err { color: var(--bad); font-size: 12px; margin-top: 8px; min-height: 16px; }
+  .lock-card button { width: 100%; margin-top: 14px; background: var(--acc); color: #1a1406; border: none;
+    border-radius: 10px; padding: 12px; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .lock-card button:hover { filter: brightness(1.08); }
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
+<div id="lock">
+  <div class="lock-card">
+    <h2>🔒 Suivi 4L Trophy</h2>
+    <div class="sub">Saisis le mot de passe pour accéder au suivi des annonces</div>
+    <input id="lockPwd" type="password" placeholder="Mot de passe" autocomplete="off">
+    <div class="err" id="lockErr"></div>
+    <button id="lockBtn" type="button">Déverrouiller</button>
+  </div>
+</div>
+<script>
+// ===== Verrouillage par mot de passe (souvenir via localStorage) =====
+(function () {
+  var LOCK_KEY = "4l_trophy_unlocked_v1";
+  var PWD = "4L-0E4I65bm"; // mot de passe (en dur — page statique)
+  var lock = document.getElementById("lock");
+  var pwd = document.getElementById("lockPwd");
+  var err = document.getElementById("lockErr");
+  var btn = document.getElementById("lockBtn");
+  var unlocked = false;
+
+  function ouvrir() {
+    unlocked = true;
+    lock.classList.add("hidden");
+  }
+  function verifier() {
+    if (pwd.value === PWD) {
+      try { localStorage.setItem(LOCK_KEY, "1"); } catch (e) {}
+      err.textContent = "";
+      ouvrir();
+    } else {
+      err.textContent = "Mot de passe incorrect.";
+      pwd.value = "";
+      pwd.focus();
+    }
+  }
+  // déjà déverrouillé sur cet appareil ?
+  var m =
+    (function () { try { return localStorage.getItem(LOCK_KEY) === "1"; } catch (e) { return false; } })();
+  if (m) { ouvrir(); } else { pwd.focus(); }
+
+  btn.addEventListener("click", verifier);
+  pwd.addEventListener("keydown", function (e) { if (e.key === "Enter") verifier(); });
+
+  // exposé pour un éventuel bouton "se déconnecter" via la console
+  window.verrouiller4l = function () { try { localStorage.removeItem(LOCK_KEY); } catch (e) {} unlocked = false; lock.classList.remove("hidden"); pwd.value = ""; pwd.focus(); };
+})();
+</script>
+
 <header>
   <div>
     <h1>🚗 Suivi des annonces 4L — 4L Trophy 2027</h1>
