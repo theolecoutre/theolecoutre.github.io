@@ -156,15 +156,38 @@
     body.mode-map #map { flex: 1 1 auto; min-height: 0; border-radius: 0;
       border: none; position: relative; width: 100%; }
     body.mode-map #viewTable { display: none !important; }
-    /* Toolbar compacte, scrollable, collée en haut (hors main, gardée sticky) */
-    body.mode-map .tools { padding: 6px 10px; gap: 6px; flex-wrap: wrap;
-      flex: 0 0 auto; }
-    body.mode-map .tools .views { order: -1; }
-    body.mode-map .tools .search { order: 0; flex: 1 1 100%; }
-    body.mode-map .tools > *:not(.views):not(.search) { font-size: 11px; }
-    /* Masquer les filtres avancés sur mobile par défaut */
-    body.mode-map .tools label { flex: 1 1 auto; }
-    body.mode-map .tools .price { width: 62px; }
+
+    /* Filtres repliés sous un bouton flottant (carte = max de place) */
+    body.mode-map .tools { display: none; }
+    #fabFilters {
+      display: none; position: fixed; top: 10px; right: 10px; z-index: 2000;
+      background: var(--card2); color: var(--acc); border: 1px solid var(--line);
+      border-radius: 12px; padding: 10px 13px; font-size: 18px; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,.4);
+    }
+    body.mode-map #fabFilters { display: block; }
+
+    /* Panneau filtres ouvert (overlay haut, scrollable) */
+    body.mode-map .tools.open {
+      display: flex; flex-direction: column; position: fixed; top: 0; left: 0; right: 0;
+      z-index: 2010; background: var(--card); border-bottom: 1px solid var(--line);
+      max-height: 62vh; overflow-y: auto; padding: 12px 14px 16px; gap: 10px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.5);
+    }
+    body.mode-map .tools.open .views { order: -1; display: flex; gap: 6px; }
+    body.mode-map .tools.open .views button { flex: 1; }
+    body.mode-map .tools.open .search { width: 100%; flex: 1 1 auto; order: 0; }
+    body.mode-map .tools.open label { display: flex; justify-content: space-between; align-items: center;
+      font-size: 12.5px; gap: 10px; }
+    body.mode-map .tools.open label select { flex: 1; max-width: 60%; }
+    body.mode-map .tools.open label .price { width: 70px; }
+    body.mode-map .tools.open .colmenu-wrap { display: none; }
+    /* Bouton "Fermer" ajouté via JS dans le panneau (visible seulement une fois ouvert) */
+    .tools-open-btn {
+      display: none; width: 100%; margin-top: 2px; background: var(--acc); color: #1a1406;
+      border: none; border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 700;
+      cursor: pointer; }
+    body.mode-map .tools.open .tools-open-btn { display: block; }
 
     /* Tableau : scroll horizontal */
     #viewTable { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -277,6 +300,9 @@
     </div>
   </div>
 </div>
+
+<!-- Bouton flottant "Filtres" : visible uniquement en mobile + vue carte -->
+<button id="fabFilters" type="button" aria-label="Filtres">⚙️</button>
 
 <main>
   <div id="viewTable">
@@ -9424,6 +9450,34 @@ rendu = function() {
   _origRendu();
   renduCarte();
 };
+
+// --- Panneau filtres mobile (bouton flottant ⚙️) ---
+(function () {
+  var fab = document.getElementById("fabFilters");
+  var tools = document.querySelector(".tools");
+  if (!fab || !tools) return;
+  function toggle(force) {
+    var open = typeof force === "boolean" ? force : !tools.classList.contains("open");
+    tools.classList.toggle("open", open);
+    fab.textContent = open ? "✕" : "⚙️";
+  }
+  // bouton "Fermer" injecté dans le panneau
+  var closeBtn = document.createElement("button");
+  closeBtn.type = "button";
+  closeBtn.className = "tools-open-btn";
+  closeBtn.textContent = "Appliquer et fermer";
+  closeBtn.addEventListener("click", function () { toggle(false); });
+  tools.appendChild(closeBtn);
+  // la touche Échap ferme le panneau
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") toggle(false);
+  });
+  fab.addEventListener("click", function () { toggle(); });
+  // se referme quand on bascule de vue
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 768) toggle(false);
+  });
+})();
 
 // Rendu du tableau d'abord (pour les compteurs), puis bascule sur la carte
 rendu();
