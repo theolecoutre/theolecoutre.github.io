@@ -108,11 +108,148 @@
     border-color: var(--line) !important; }
   .leaflet-control-attribution { background: rgba(15,20,32,.8) !important; color: var(--mut) !important; font-size: 10px; }
   .leaflet-control-attribution a { color: var(--info) !important; }
+
+  /* --- Écran de verrouillage (mot de passe) --- */
+  #lock { position: fixed; inset: 0; z-index: 3000; background: linear-gradient(135deg, #1a2337, #0f1420);
+          display: flex; align-items: center; justify-content: center; }
+  #lock.hidden { display: none; }
+  .lock-card { background: var(--card2); border: 1px solid var(--line); border-radius: 16px;
+               padding: 32px 36px; width: 340px; box-shadow: 0 16px 48px rgba(0,0,0,.5); }
+  .lock-card h2 { margin: 0 0 4px; font-size: 20px; color: var(--txt); }
+  .lock-card .sub { color: var(--mut); font-size: 12.5px; margin-bottom: 20px; }
+  .lock-card input { width: 100%; background: var(--bg); color: var(--txt); border: 1px solid var(--line);
+    border-radius: 10px; padding: 12px 14px; font-size: 15px; outline: none; box-sizing: border-box; }
+  .lock-card input:focus { border-color: var(--acc); }
+  .lock-card .err { color: var(--bad); font-size: 12px; margin-top: 8px; min-height: 16px; }
+  .lock-card button { width: 100%; margin-top: 14px; background: var(--acc); color: #1a1406; border: none;
+    border-radius: 10px; padding: 12px; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .lock-card button:hover { filter: brightness(1.08); }
+
+  /* Vue Carte : occupe l'espace disponible (desktop) */
+  body.mode-map #map { width: 100%; height: calc(100vh - 190px); min-height: 480px; }
+
+  /* ===== OPTIMISATION MOBILE ===== */
+  @media (max-width: 768px) {
+    /* Header compact */
+    header { padding: 10px 12px; }
+    header h1 { font-size: 15px; }
+    header .sub { font-size: 11px; }
+    .count { font-size: 11.5px; padding: 5px 10px; }
+
+    /* Toolbar compacte + scroll horizontal si besoin */
+    .tools { padding: 8px 12px; gap: 8px; }
+    .tools .search { flex: 1 1 100%; min-width: 0; order: 10; }
+    .tools label { font-size: 11px; }
+    .tools input.price { width: 72px; }
+    .views button { padding: 6px 10px; font-size: 12px; }
+
+    main { padding: 10px 12px 30px; }
+
+    /* Carte MAJEURE : plein écran quand la vue carte est active */
+    body.mode-map { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    body.mode-map header { display: none; }
+    body.mode-map footer { display: none; }
+    body.mode-map main { flex: 1 1 auto; min-height: 0; padding: 0;
+      display: flex; flex-direction: column; }
+    body.mode-map #viewMap { display: flex !important; flex-direction: column;
+      flex: 1 1 auto; min-height: 0; padding: 0; }
+    body.mode-map #map { flex: 1 1 auto; min-height: 0; border-radius: 0;
+      border: none; position: relative; width: 100%; }
+    body.mode-map #viewTable { display: none !important; }
+
+    /* Filtres repliés sous un bouton flottant (carte = max de place) */
+    body.mode-map .tools { display: none; }
+    #fabFilters {
+      display: none; position: fixed; top: 10px; right: 10px; z-index: 2000;
+      background: var(--card2); color: var(--acc); border: 1px solid var(--line);
+      border-radius: 12px; padding: 10px 13px; font-size: 18px; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,.4);
+    }
+    body.mode-map #fabFilters { display: block; }
+
+    /* Panneau filtres ouvert (overlay haut, scrollable) */
+    body.mode-map .tools.open {
+      display: flex; flex-direction: column; position: fixed; top: 0; left: 0; right: 0;
+      z-index: 2010; background: var(--card); border-bottom: 1px solid var(--line);
+      max-height: 62vh; overflow-y: auto; padding: 12px 14px 16px; gap: 10px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.5);
+    }
+    body.mode-map .tools.open .views { order: -1; display: flex; gap: 6px; }
+    body.mode-map .tools.open .views button { flex: 1; }
+    body.mode-map .tools.open .search { width: 100%; flex: 1 1 auto; order: 0; }
+    body.mode-map .tools.open label { display: flex; justify-content: space-between; align-items: center;
+      font-size: 12.5px; gap: 10px; }
+    body.mode-map .tools.open label select { flex: 1; max-width: 60%; }
+    body.mode-map .tools.open label .price { width: 70px; }
+    body.mode-map .tools.open .colmenu-wrap { display: none; }
+    /* Bouton "Fermer" ajouté via JS dans le panneau (visible seulement une fois ouvert) */
+    .tools-open-btn {
+      display: none; width: 100%; margin-top: 2px; background: var(--acc); color: #1a1406;
+      border: none; border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 700;
+      cursor: pointer; }
+    body.mode-map .tools.open .tools-open-btn { display: block; }
+
+    /* Tableau : scroll horizontal */
+    #viewTable { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { min-width: 720px; }
+
+    /* Popup plus compacte sur mobile */
+    .leaflet-popup-content { width: 250px !important; }
+    .map-pop .prix { font-size: 14px; }
+  }
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
+<div id="lock">
+  <div class="lock-card">
+    <h2>🔒 Suivi 4L Trophy</h2>
+    <div class="sub">Saisis le mot de passe pour accéder au suivi des annonces</div>
+    <input id="lockPwd" type="password" placeholder="Mot de passe" autocomplete="off">
+    <div class="err" id="lockErr"></div>
+    <button id="lockBtn" type="button">Déverrouiller</button>
+  </div>
+</div>
+<script>
+// ===== Verrouillage par mot de passe (souvenir via localStorage) =====
+(function () {
+  var LOCK_KEY = "4l_trophy_unlocked_v1";
+  var PWD = "4L-0E4I65bm"; // mot de passe (en dur — page statique)
+  var lock = document.getElementById("lock");
+  var pwd = document.getElementById("lockPwd");
+  var err = document.getElementById("lockErr");
+  var btn = document.getElementById("lockBtn");
+  var unlocked = false;
+
+  function ouvrir() {
+    unlocked = true;
+    lock.classList.add("hidden");
+  }
+  function verifier() {
+    if (pwd.value === PWD) {
+      try { localStorage.setItem(LOCK_KEY, "1"); } catch (e) {}
+      err.textContent = "";
+      ouvrir();
+    } else {
+      err.textContent = "Mot de passe incorrect.";
+      pwd.value = "";
+      pwd.focus();
+    }
+  }
+  // déjà déverrouillé sur cet appareil ?
+  var m =
+    (function () { try { return localStorage.getItem(LOCK_KEY) === "1"; } catch (e) { return false; } })();
+  if (m) { ouvrir(); } else { pwd.focus(); }
+
+  btn.addEventListener("click", verifier);
+  pwd.addEventListener("keydown", function (e) { if (e.key === "Enter") verifier(); });
+
+  // exposé pour un éventuel bouton "se déconnecter" via la console
+  window.verrouiller4l = function () { try { localStorage.removeItem(LOCK_KEY); } catch (e) {} unlocked = false; lock.classList.remove("hidden"); pwd.value = ""; pwd.focus(); };
+})();
+</script>
+
 <header>
   <div>
     <h1>🚗 Suivi des annonces 4L — 4L Trophy 2027</h1>
@@ -163,6 +300,9 @@
     </div>
   </div>
 </div>
+
+<!-- Bouton flottant "Filtres" : visible uniquement en mobile + vue carte -->
+<button id="fabFilters" type="button" aria-label="Filtres">⚙️</button>
 
 <main>
   <div id="viewTable">
@@ -9573,6 +9713,7 @@ window.SUIVI_4L = [
 ];
 </script>
 
+
 <script>
 const DATA = (window.SUIVI_4L || []).map(r => ({ ...r }));
 const $ = id => document.getElementById(id);
@@ -9870,6 +10011,7 @@ function renduCarte() {
 // --- bascule Tableau / Carte ---
 function setView(v) {
   const t = v === "map";
+  document.body.classList.toggle("mode-map", t);
   $("viewTable").style.display = t ? "none" : "block";
   $("viewMap").style.display = t ? "block" : "none";
   $("viewBtnTable").classList.toggle("active", !t);
@@ -9880,6 +10022,7 @@ function setView(v) {
     renduCarte();
   }
 }
+// La carte est la vue par défaut (surtout sur mobile)
 $("viewBtnTable").addEventListener("click", () => setView("table"));
 $("viewBtnMap").addEventListener("click", () => setView("map"));
 
@@ -9890,7 +10033,37 @@ rendu = function() {
   renduCarte();
 };
 
+// --- Panneau filtres mobile (bouton flottant ⚙️) ---
+(function () {
+  var fab = document.getElementById("fabFilters");
+  var tools = document.querySelector(".tools");
+  if (!fab || !tools) return;
+  function toggle(force) {
+    var open = typeof force === "boolean" ? force : !tools.classList.contains("open");
+    tools.classList.toggle("open", open);
+    fab.textContent = open ? "✕" : "⚙️";
+  }
+  // bouton "Fermer" injecté dans le panneau
+  var closeBtn = document.createElement("button");
+  closeBtn.type = "button";
+  closeBtn.className = "tools-open-btn";
+  closeBtn.textContent = "Appliquer et fermer";
+  closeBtn.addEventListener("click", function () { toggle(false); });
+  tools.appendChild(closeBtn);
+  // la touche Échap ferme le panneau
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") toggle(false);
+  });
+  fab.addEventListener("click", function () { toggle(); });
+  // se referme quand on bascule de vue
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 768) toggle(false);
+  });
+})();
+
+// Rendu du tableau d'abord (pour les compteurs), puis bascule sur la carte
 rendu();
+setView("map");
 </script>
 </body>
 </html>
