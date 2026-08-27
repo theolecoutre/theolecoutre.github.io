@@ -12060,6 +12060,7 @@ window.SUIVI_4L = [
 
 
 
+
 <script>
 const DATA = (window.SUIVI_4L || []).map(r => ({ ...r }));
 const $ = id => document.getElementById(id);
@@ -12293,6 +12294,10 @@ function initMap() {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }).addTo(map);
   markerLayer = L.layerGroup().addTo(map);
+  // Recale les écarts (dédensification) quand on zoome/déplace, pour qu'ils
+  // restent en pixels constants et ne partent pas dans tous les sens.
+  map.on("zoomend", function(){ renduCarte(); });
+  map.on("moveend", function(){ renduCarte(); });
 }
 
 function badgeCls(k, v) {
@@ -12353,7 +12358,9 @@ function renduCarte() {
   const prixFmt = p => { try { return Number(p).toLocaleString("fr-FR") + " €"; } catch(e){ return ""; } };
   const STCOL = { attente: "#38bdf8", reponse: "#22c55e", appel: "#f59e0b", horsjeu: "#64748b" };
 
-  // Dédensification : regrouper par ville, écarter les annonces du même point
+  // Dédensification : regrouper par ville, écarter les annonces du même point.
+  // Approche 100% en PIXELS : on projette le point réel, on décale de quelques
+  // dizaines de px au max autour de lui, puis on reprojette en lat/lng.
   const groups = new Map();
   rows.forEach(r => {
     const key = r.geo[0].toFixed(6) + "," + r.geo[1].toFixed(6);
@@ -12361,68 +12368,27 @@ function renduCarte() {
     groups.get(key).push(r);
   });
 
-  // Écart en PIXELS entre badges d'une même ville (adapté au zoom pour rester visible,
-  // car un rayon en degrés fixe devient <1px aux zooms bas après fitBounds).
-  const zoom = map ? map.getZoom() : 6;
-  const lat0 = rows.length ? rows[0].geo[0] : 46.5;
-  const pxPerDeg = (256 * Math.pow(2, zoom)) / 360 * Math.cos(lat0 * Math.PI / 180) || 1;
-  const GAP = 110; // px entre deux badges prix (~80px de large + marge)
-  const R_deg = GAP / pxPerDeg;
-
-  groups.forEach((gp, key) => {
+  groups.forEach((gp) => {
     const [clat, clon] = gp[0].geo;
     const n = gp.length;
-    if (n === 1) {
-      gp[0]._pos = [clat, clon];
-    } else {
-      // Répartition sur un cercle, rayon croissant légèrement avec le nombre
-      const rayon = R_deg * (0.7 + 0.22 * n);
-      const step = (2 * Math.PI) / n;
-      gp.forEach((r, i) => {
-        const a = i * step;
-        r._pos = [clat + rayon * Math.cos(a), clon + rayon * Math.sin(a)];
-      });
-    }
-  });
-
-  // Seconde passe : résoudre les collisions en PIXELS (villes proches qui tombent
-  // au même point à zoom bas). Regroupement par case (grid) sur la projection.
-  const CELL = 105; // px — en dessous de la largeur d'un badge + marge
-  const grid = new Map();
-  rows.forEach(r => {
-    if (!r._pos) return;
-    const pt = map ? map.latLngToContainerPoint(r._pos) : null;
-    if (!pt) return;
-    r._pt = pt;
-    const kx = Math.floor(pt.x / CELL), ky = Math.floor(pt.y / CELL);
-    const key = kx + "," + ky;
-    if (!grid.has(key)) grid.set(key, []);
-    grid.get(key).push(r);
-  });
-  if (map) {
-    const occupied = new Set();
-    grid.forEach((gp) => {
-      if (gp.length < 2) { occupied.add(gp[0]._pt.x + "," + gp[0]._pt.y); return; }
-      // répartir ce groupe sur un nouveau cercle en pixels autour du centre
-      const cx = gp.reduce((s, r) => s + r._pt.x, 0) / gp.length;
-      const cy = gp.reduce((s, r) => s + r._pt.y, 0) / gp.length;
-      const n = gp.length;
-      const rad = CELL * (0.55 + 0.18 * n);
-      const step = (2 * Math.PI) / n;
-      gp.forEach((r, i) => {
-        const a = i * step + (n % 2 ? 0 : Math.PI / n);
-        let px = cx + rad * Math.cos(a), py = cy + rad * Math.sin(a);
-        // éviter les superpositions exactes résiduelles
-        let guard = 0;
-        while (occupied.has(px.toFixed(1) + "," + py.toFixed(1)) && guard < 40) {
-          const jitter = ((guard * 7919) % 37) - 18;
-          py += jitter * 1.5; guard++;
-        }
-        occupied.add(px.toFixed(1) + "," + py.toFixed(1));
-        r._pos = map.containerPointToLatLng([px, py]);
-      });
+    if (n === 1) { gp[0]._pos = [clat, clon]; return; }
+    // Centre en pixels du point réel
+    const c = map ? map.latLngToContainerPoint([clat, clon]) : { x: 0, y: 0 };
+    // Rayon en pixels : serré, croissant très légèrement avec le nombre
+    const rad = 46 + 10 * n;
+    const step = (2 * Math.PI) / n;
+    gp.forEach((r, i) => {
+      const a = i * step + (n % 2 ? 0 : Math.PI / n);
+      const px = c.x + rad * Math.cos(a);
+      const py = c.y + rad * Math.sin(a);
+      if (map) {
+        const ll = map.containerPointToLatLng([px, py]);
+        r._pos = [ll.lat, ll.lng];
+      } else {
+        r._pos = [clat, clon];
+      }
     });
-  }
+  });
 
   rows.forEach(r => {
     if (!r._pos) return;
@@ -12441,8 +12407,11 @@ function renduCarte() {
     mk.addTo(markerLayer);
     bounds.push([lat, lon]);
   });
-  if (bounds.length && map) {
+  if (!renduCarte._fitted && bounds.length && map) {
+    renduCarte._fitted = true;
     map.fitBounds(bounds, { padding: [30, 30], maxZoom: 9 });
+    // re-rendre après fitBounds pour recalculer les écarts au bon zoom
+    setTimeout(function(){ renduCarte(); }, 60);
   }
 }
 
