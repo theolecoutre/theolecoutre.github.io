@@ -12059,6 +12059,7 @@ window.SUIVI_4L = [
 
 
 
+
 <script>
 const DATA = (window.SUIVI_4L || []).map(r => ({ ...r }));
 const $ = id => document.getElementById(id);
@@ -12383,6 +12384,45 @@ function renduCarte() {
       });
     }
   });
+
+  // Seconde passe : résoudre les collisions en PIXELS (villes proches qui tombent
+  // au même point à zoom bas). Regroupement par case (grid) sur la projection.
+  const CELL = 105; // px — en dessous de la largeur d'un badge + marge
+  const grid = new Map();
+  rows.forEach(r => {
+    if (!r._pos) return;
+    const pt = map ? map.latLngToContainerPoint(r._pos) : null;
+    if (!pt) return;
+    r._pt = pt;
+    const kx = Math.floor(pt.x / CELL), ky = Math.floor(pt.y / CELL);
+    const key = kx + "," + ky;
+    if (!grid.has(key)) grid.set(key, []);
+    grid.get(key).push(r);
+  });
+  if (map) {
+    const occupied = new Set();
+    grid.forEach((gp) => {
+      if (gp.length < 2) { occupied.add(gp[0]._pt.x + "," + gp[0]._pt.y); return; }
+      // répartir ce groupe sur un nouveau cercle en pixels autour du centre
+      const cx = gp.reduce((s, r) => s + r._pt.x, 0) / gp.length;
+      const cy = gp.reduce((s, r) => s + r._pt.y, 0) / gp.length;
+      const n = gp.length;
+      const rad = CELL * (0.55 + 0.18 * n);
+      const step = (2 * Math.PI) / n;
+      gp.forEach((r, i) => {
+        const a = i * step + (n % 2 ? 0 : Math.PI / n);
+        let px = cx + rad * Math.cos(a), py = cy + rad * Math.sin(a);
+        // éviter les superpositions exactes résiduelles
+        let guard = 0;
+        while (occupied.has(px.toFixed(1) + "," + py.toFixed(1)) && guard < 40) {
+          const jitter = ((guard * 7919) % 37) - 18;
+          py += jitter * 1.5; guard++;
+        }
+        occupied.add(px.toFixed(1) + "," + py.toFixed(1));
+        r._pos = map.containerPointToLatLng([px, py]);
+      });
+    });
+  }
 
   rows.forEach(r => {
     if (!r._pos) return;
