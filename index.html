@@ -12062,6 +12062,7 @@ window.SUIVI_4L = [
 
 
 
+
 <script>
 const DATA = (window.SUIVI_4L || []).map(r => ({ ...r }));
 const $ = id => document.getElementById(id);
@@ -12356,8 +12357,9 @@ function renduCarte() {
   const STCOL = { attente: "#38bdf8", reponse: "#22c55e", appel: "#f59e0b", horsjeu: "#64748b" };
 
   // Dédensification : regrouper par ville, écarter les annonces du même point.
-  // Approche 100% en PIXELS : on projette le point réel, on décale de quelques
-  // dizaines de px au max autour de lui, puis on reprojette en lat/lng.
+  // On travaille en PIXELS projetés, mais TOUJOURS borné en degrés par rapport au
+  // point réel (MAX_DLAT/MAX_DLON) pour ne JAMAIS envoyer un marqueur loin / en mer,
+  // quel que soit le zoom du moment.
   const groups = new Map();
   rows.forEach(r => {
     const key = r.geo[0].toFixed(6) + "," + r.geo[1].toFixed(6);
@@ -12365,22 +12367,28 @@ function renduCarte() {
     groups.get(key).push(r);
   });
 
+  const MAX_DLAT = 0.03;   // ~3.3 km max en latitude — reste à terre même pour une ville côtière
+  const MAX_DLON = 0.045;  // ~3.4 km max en longitude (à 45°N)
   groups.forEach((gp) => {
     const [clat, clon] = gp[0].geo;
     const n = gp.length;
     if (n === 1) { gp[0]._pos = [clat, clon]; return; }
-    // Centre en pixels du point réel
-    const c = map ? map.latLngToContainerPoint([clat, clon]) : { x: 0, y: 0 };
-    // Rayon en pixels : serré, croissant très légèrement avec le nombre
-    const rad = 46 + 10 * n;
     const step = (2 * Math.PI) / n;
     gp.forEach((r, i) => {
       const a = i * step + (n % 2 ? 0 : Math.PI / n);
-      const px = c.x + rad * Math.cos(a);
-      const py = c.y + rad * Math.sin(a);
+      // Rayon en px : croît doucement avec n (2 -> ~52px, 4 -> ~70px)
+      const rr = 44 + 9 * n;
+      const dx = rr * Math.cos(a);
+      const dy = rr * Math.sin(a);
       if (map) {
-        const ll = map.containerPointToLatLng([px, py]);
-        r._pos = [ll.lat, ll.lng];
+        const c = map.latLngToContainerPoint([clat, clon]);
+        const ll = map.containerPointToLatLng([c.x + dx, c.y + dy]);
+        let dlat = ll.lat - clat, dlon = ll.lng - clon;
+        // Borne : jamais plus loin que ~13 km
+        const clamp = (v, m) => Math.max(-m, Math.min(m, v));
+        dlat = clamp(dlat, MAX_DLAT);
+        dlon = clamp(dlon, MAX_DLON);
+        r._pos = [clat + dlat, clon + dlon];
       } else {
         r._pos = [clat, clon];
       }
@@ -12407,6 +12415,10 @@ function renduCarte() {
   if (!renduCarte._fitted && bounds.length && map) {
     renduCarte._fitted = true;
     map.fitBounds(bounds, { padding: [30, 30], maxZoom: 9 });
+    // Re-rend au zoom final pour recalibrer les écarts en pixels (toujours borné
+    // en km, donc jamais en mer). Pas un listener : simple différé, sans boucle.
+    var _self = renduCarte;
+    setTimeout(function(){ _self(); }, 80);
   }
 }
 
