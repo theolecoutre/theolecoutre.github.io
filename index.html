@@ -12057,6 +12057,7 @@ window.SUIVI_4L = [
 
 
 
+
 <script>
 const DATA = (window.SUIVI_4L || []).map(r => ({ ...r }));
 const $ = id => document.getElementById(id);
@@ -12345,16 +12346,43 @@ function popupHTML(r) {
 function renduCarte() {
   if (!markerLayer) return;
   markerLayer.clearLayers();
-  const rows = filtrer();
+  const rows = filtrer().filter(r => !!r.geo);
   const bounds = [];
   const prixFmt = p => { try { return Number(p).toLocaleString("fr-FR") + " €"; } catch(e){ return ""; } };
+  const STCOL = { attente: "#38bdf8", reponse: "#22c55e", appel: "#f59e0b", horsjeu: "#64748b" };
+
+  // Dédensification : regrouper par ville, écarter les annonces du même point
+  const groups = new Map();
   rows.forEach(r => {
-    if (!r.geo) return;
-    const [lat, lon] = r.geo;
+    const key = r.geo[0].toFixed(6) + "," + r.geo[1].toFixed(6);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(r);
+  });
+
+  // Rayon d'écart (en degrés). ~0.0035° ≈ 350 m — les badges prix font ~80px,
+  // à zoom 6-9 ce rayon sépare sans perdre l'ancrage visuel à la ville.
+  const R = 0.0038;
+  groups.forEach((gp, key) => {
+    const [clat, clon] = gp[0].geo;
+    const n = gp.length;
+    if (n === 1) {
+      gp[0]._pos = [clat, clon];
+    } else {
+      // Répartition sur un cercle : angles décalés pour éviter les croisements
+      const step = (2 * Math.PI) / n;
+      gp.forEach((r, i) => {
+        const a = i * step;
+        const off = R * (0.8 + 0.25 * (n % 3));
+        r._pos = [clat + off * Math.cos(a), clon + off * Math.sin(a)];
+      });
+    }
+  });
+
+  rows.forEach(r => {
+    if (!r._pos) return;
+    const [lat, lon] = r._pos;
     const st = r.statut in COLOR_STATUT ? r.statut : "attente";
     const prixTxt = r.prix ? prixFmt(r.prix) : "—";
-    // Marqueur avec le prix affiché directement sur la carte
-    const STCOL = { attente: "#38bdf8", reponse: "#22c55e", appel: "#f59e0b", horsjeu: "#64748b" };
     const col = STCOL[st] || "#38bdf8";
     const icon = L.divIcon({
       className: "pm-wrap",
@@ -12371,6 +12399,7 @@ function renduCarte() {
     map.fitBounds(bounds, { padding: [30, 30], maxZoom: 9 });
   }
 }
+
 
 // --- bascule Tableau / Carte ---
 function setView(v) {
