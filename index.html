@@ -12055,6 +12055,7 @@ window.SUIVI_4L = [
 
 
 
+
 <script>
 const DATA = (window.SUIVI_4L || []).map(r => ({ ...r }));
 const $ = id => document.getElementById(id);
@@ -12352,9 +12353,11 @@ function renduCarte() {
     const st = r.statut in COLOR_STATUT ? r.statut : "attente";
     const prixTxt = r.prix ? prixFmt(r.prix) : "—";
     // Marqueur avec le prix affiché directement sur la carte
+    const STCOL = { attente: "#38bdf8", reponse: "#22c55e", appel: "#f59e0b", horsjeu: "#64748b" };
+    const col = STCOL[st] || "#38bdf8";
     const icon = L.divIcon({
       className: "pm-wrap",
-      html: `<div class="prix-marker pm-${st}"><span class="pm-dot"></span>${prixTxt}</div>`,
+      html: `<div class="prix-marker pm-${st}" style="display:flex;align-items:center;gap:5px;background:#1d2638;color:#e8ecf4;border:2px solid ${col};border-radius:20px;padding:2px 8px 2px 5px;font-weight:700;font-size:11px;white-space:nowrap;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,.5);transform:translate(-50%,-50%)"><span class="pm-dot" style="width:8px;height:8px;border-radius:50%;background:${col};flex:0 0 auto"></span>${prixTxt}</div>`,
       iconSize: [0, 0],
       iconAnchor: [0, 0]
     });
