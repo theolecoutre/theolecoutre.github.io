@@ -12061,6 +12061,7 @@ window.SUIVI_4L = [
 
 
 
+
 <script>
 const DATA = (window.SUIVI_4L || []).map(r => ({ ...r }));
 const $ = id => document.getElementById(id);
@@ -12294,10 +12295,6 @@ function initMap() {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }).addTo(map);
   markerLayer = L.layerGroup().addTo(map);
-  // Recale les écarts (dédensification) quand on zoome/déplace, pour qu'ils
-  // restent en pixels constants et ne partent pas dans tous les sens.
-  map.on("zoomend", function(){ renduCarte(); });
-  map.on("moveend", function(){ renduCarte(); });
 }
 
 function badgeCls(k, v) {
@@ -12410,8 +12407,6 @@ function renduCarte() {
   if (!renduCarte._fitted && bounds.length && map) {
     renduCarte._fitted = true;
     map.fitBounds(bounds, { padding: [30, 30], maxZoom: 9 });
-    // re-rendre après fitBounds pour recalculer les écarts au bon zoom
-    setTimeout(function(){ renduCarte(); }, 60);
   }
 }
 
