@@ -71,185 +71,9 @@
   .b-nonprep { background: rgba(139,150,173,.12); color: var(--mut); }
   .empty { text-align: center; padding: 40px; color: var(--mut); }
   footer { padding: 12px 24px; color: var(--mut); font-size: 11.5px; border-top: 1px solid var(--line); }
-
-  /* --- Bascule Tableau/Carte --- */
-  .views { display: flex; gap: 4px; background: var(--bg); border: 1px solid var(--line);
-           border-radius: 10px; padding: 3px; }
-  .views button { background: transparent; border: none; color: var(--mut);
-    padding: 7px 14px; border-radius: 7px; font-size: 13px; cursor: pointer; }
-  .views button.active { background: var(--card2); color: var(--acc); font-weight: 600; }
-
-  /* --- Carte --- */
-  #map { height: calc(100vh - 190px); min-height: 480px; border-radius: 12px;
-         border: 1px solid var(--line); background: var(--card); }
-  #viewMap { display: none; padding: 14px 24px 40px; }
-  .leaflet-container { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background:#0f1420; }
-  .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--card2); color: var(--txt);
-    border: 1px solid var(--line); box-shadow: 0 8px 24px rgba(0,0,0,.5); }
-  .leaflet-popup-content { margin: 12px 14px; width: 300px !important; }
-  .leaflet-container a.leaflet-popup-close-button { color: var(--mut); }
-  .map-pop .t { font-size: 14px; font-weight: 700; color: var(--txt); margin-bottom: 4px; }
-  .map-pop .row { display: flex; justify-content: space-between; gap: 8px; font-size: 12px;
-                  padding: 2px 0; color: var(--mut); border-bottom: 1px solid rgba(255,255,255,.04); }
-  .map-pop .row b { color: var(--txt); font-weight: 600; text-align: right; }
-  .map-pop .prix { font-size: 16px; font-weight: 700; color: var(--acc); margin: 4px 0; }
-  .map-pop .lien { display: flex; gap: 8px; margin-top: 10px; }
-  .map-pop .lien a { flex: 1; text-align: center; padding: 7px; border-radius: 8px; font-size: 12.5px;
-    font-weight: 600; text-decoration: none; }
-  .map-pop .lien .annonce { background: var(--acc); color: #1a1406; }
-  .map-pop .lien .annonce:hover { filter: brightness(1.08); text-decoration: none; }
-  .map-pop .lien .conv { background: var(--card2); border: 1px solid var(--line); color: var(--info); }
-  .map-pop .lien .conv:hover { border-color: var(--info); text-decoration: none; }
-  .map-pop .badges { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0; }
-  .map-pop .badges .badge { font-size: 10.5px; }
-  .map-pop .notes { font-size: 11.5px; color: var(--mut); line-height: 1.45; margin-top: 6px;
-                    max-height: 90px; overflow: auto; }
-  .leaflet-control-zoom a { background: var(--card2) !important; color: var(--txt) !important;
-    border-color: var(--line) !important; }
-  .leaflet-control-attribution { background: rgba(15,20,32,.8) !important; color: var(--mut) !important; font-size: 10px; }
-  .leaflet-control-attribution a { color: var(--info) !important; }
-
-  /* --- Écran de verrouillage (mot de passe) --- */
-  #lock { position: fixed; inset: 0; z-index: 3000; background: linear-gradient(135deg, #1a2337, #0f1420);
-          display: flex; align-items: center; justify-content: center; }
-  #lock.hidden { display: none; }
-  .lock-card { background: var(--card2); border: 1px solid var(--line); border-radius: 16px;
-               padding: 32px 36px; width: 340px; box-shadow: 0 16px 48px rgba(0,0,0,.5); }
-  .lock-card h2 { margin: 0 0 4px; font-size: 20px; color: var(--txt); }
-  .lock-card .sub { color: var(--mut); font-size: 12.5px; margin-bottom: 20px; }
-  .lock-card input { width: 100%; background: var(--bg); color: var(--txt); border: 1px solid var(--line);
-    border-radius: 10px; padding: 12px 14px; font-size: 15px; outline: none; box-sizing: border-box; }
-  .lock-card input:focus { border-color: var(--acc); }
-  .lock-card .err { color: var(--bad); font-size: 12px; margin-top: 8px; min-height: 16px; }
-  .lock-card button { width: 100%; margin-top: 14px; background: var(--acc); color: #1a1406; border: none;
-    border-radius: 10px; padding: 12px; font-size: 15px; font-weight: 700; cursor: pointer; }
-  .lock-card button:hover { filter: brightness(1.08); }
-
-  /* Vue Carte : occupe l'espace disponible (desktop) */
-  body.mode-map #map { width: 100%; height: calc(100vh - 190px); min-height: 480px; }
-
-  /* ===== OPTIMISATION MOBILE ===== */
-  @media (max-width: 768px) {
-    /* Header compact */
-    header { padding: 10px 12px; }
-    header h1 { font-size: 15px; }
-    header .sub { font-size: 11px; }
-    .count { font-size: 11.5px; padding: 5px 10px; }
-
-    /* Toolbar compacte + scroll horizontal si besoin */
-    .tools { padding: 8px 12px; gap: 8px; }
-    .tools .search { flex: 1 1 100%; min-width: 0; order: 10; }
-    .tools label { font-size: 11px; }
-    .tools input.price { width: 72px; }
-    .views button { padding: 6px 10px; font-size: 12px; }
-
-    main { padding: 10px 12px 30px; }
-
-    /* Carte MAJEURE : plein écran quand la vue carte est active */
-    body.mode-map { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-    body.mode-map header { display: none; }
-    body.mode-map footer { display: none; }
-    body.mode-map main { flex: 1 1 auto; min-height: 0; padding: 0;
-      display: flex; flex-direction: column; }
-    body.mode-map #viewMap { display: flex !important; flex-direction: column;
-      flex: 1 1 auto; min-height: 0; padding: 0; }
-    body.mode-map #map { flex: 1 1 auto; min-height: 0; border-radius: 0;
-      border: none; position: relative; width: 100%; }
-    body.mode-map #viewTable { display: none !important; }
-
-    /* Filtres repliés sous un bouton flottant (carte = max de place) */
-    body.mode-map .tools { display: none; }
-    #fabFilters {
-      display: none; position: fixed; top: 10px; right: 10px; z-index: 2000;
-      background: var(--card2); color: var(--acc); border: 1px solid var(--line);
-      border-radius: 12px; padding: 10px 13px; font-size: 18px; cursor: pointer;
-      box-shadow: 0 4px 16px rgba(0,0,0,.4);
-    }
-    body.mode-map #fabFilters { display: block; }
-
-    /* Panneau filtres ouvert (overlay haut, scrollable) */
-    body.mode-map .tools.open {
-      display: flex; flex-direction: column; position: fixed; top: 0; left: 0; right: 0;
-      z-index: 2010; background: var(--card); border-bottom: 1px solid var(--line);
-      max-height: 62vh; overflow-y: auto; padding: 12px 14px 16px; gap: 10px;
-      box-shadow: 0 8px 30px rgba(0,0,0,.5);
-    }
-    body.mode-map .tools.open .views { order: -1; display: flex; gap: 6px; }
-    body.mode-map .tools.open .views button { flex: 1; }
-    body.mode-map .tools.open .search { width: 100%; flex: 1 1 auto; order: 0; }
-    body.mode-map .tools.open label { display: flex; justify-content: space-between; align-items: center;
-      font-size: 12.5px; gap: 10px; }
-    body.mode-map .tools.open label select { flex: 1; max-width: 60%; }
-    body.mode-map .tools.open label .price { width: 70px; }
-    body.mode-map .tools.open .colmenu-wrap { display: none; }
-    /* Bouton "Fermer" ajouté via JS dans le panneau (visible seulement une fois ouvert) */
-    .tools-open-btn {
-      display: none; width: 100%; margin-top: 2px; background: var(--acc); color: #1a1406;
-      border: none; border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 700;
-      cursor: pointer; }
-    body.mode-map .tools.open .tools-open-btn { display: block; }
-
-    /* Tableau : scroll horizontal */
-    #viewTable { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table { min-width: 720px; }
-
-    /* Popup plus compacte sur mobile */
-    .leaflet-popup-content { width: 250px !important; }
-    .map-pop .prix { font-size: 14px; }
-  }
 </style>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
-<div id="lock">
-  <div class="lock-card">
-    <h2>🔒 Suivi 4L Trophy</h2>
-    <div class="sub">Saisis le mot de passe pour accéder au suivi des annonces</div>
-    <input id="lockPwd" type="password" placeholder="Mot de passe" autocomplete="off">
-    <div class="err" id="lockErr"></div>
-    <button id="lockBtn" type="button">Déverrouiller</button>
-  </div>
-</div>
-<script>
-// ===== Verrouillage par mot de passe (souvenir via localStorage) =====
-(function () {
-  var LOCK_KEY = "4l_trophy_unlocked_v1";
-  var PWD = "4L-0E4I65bm"; // mot de passe (en dur — page statique)
-  var lock = document.getElementById("lock");
-  var pwd = document.getElementById("lockPwd");
-  var err = document.getElementById("lockErr");
-  var btn = document.getElementById("lockBtn");
-  var unlocked = false;
-
-  function ouvrir() {
-    unlocked = true;
-    lock.classList.add("hidden");
-  }
-  function verifier() {
-    if (pwd.value === PWD) {
-      try { localStorage.setItem(LOCK_KEY, "1"); } catch (e) {}
-      err.textContent = "";
-      ouvrir();
-    } else {
-      err.textContent = "Mot de passe incorrect.";
-      pwd.value = "";
-      pwd.focus();
-    }
-  }
-  // déjà déverrouillé sur cet appareil ?
-  var m =
-    (function () { try { return localStorage.getItem(LOCK_KEY) === "1"; } catch (e) { return false; } })();
-  if (m) { ouvrir(); } else { pwd.focus(); }
-
-  btn.addEventListener("click", verifier);
-  pwd.addEventListener("keydown", function (e) { if (e.key === "Enter") verifier(); });
-
-  // exposé pour un éventuel bouton "se déconnecter" via la console
-  window.verrouiller4l = function () { try { localStorage.removeItem(LOCK_KEY); } catch (e) {} unlocked = false; lock.classList.remove("hidden"); pwd.value = ""; pwd.focus(); };
-})();
-</script>
-
 <header>
   <div>
     <h1>🚗 Suivi des annonces 4L — 4L Trophy 2027</h1>
@@ -259,10 +83,6 @@
 </header>
 
 <div class="tools">
-  <div class="views">
-    <button id="viewBtnTable" type="button" class="active">📋 Tableau</button>
-    <button id="viewBtnMap" type="button">🗺️ Carte</button>
-  </div>
   <input class="search" id="fSearch" type="text" placeholder="🔎 Rechercher (titre, vendeur, ville, notes…)">
   <label>Statut
     <select id="fStatut">
@@ -301,26 +121,191 @@
   </div>
 </div>
 
-<!-- Bouton flottant "Filtres" : visible uniquement en mobile + vue carte -->
-<button id="fabFilters" type="button" aria-label="Filtres">⚙️</button>
-
 <main>
-  <div id="viewTable">
-    <table id="tbl">
-      <thead id="thead"></thead>
-      <tbody id="tbody"></tbody>
-    </table>
-    <div class="empty" id="empty" style="display:none">Aucune annonce ne correspond aux filtres.</div>
-  </div>
-  <div id="viewMap">
-    <div id="map"></div>
-  </div>
+  <table id="tbl">
+    <thead id="thead"></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <div class="empty" id="empty" style="display:none">Aucune annonce ne correspond aux filtres.</div>
 </main>
 
 <footer>Généré par Hermes — données : <span id="metaDate">…</span> · clic sur les colonnes pour trier · ☰ pour masquer/afficher · glisser pour réorganiser</footer>
 
-<script>window.GEO_VILLES = {"Agen":[44.2015827,0.6176112],"Aiglemont":[49.7820157,4.7660255],"Aiguefonde":[43.4937763,2.3168355],"Aix-en-Provence":[43.5298424,5.4474738],"Allègre-les-Fumades":[44.1986016,4.2447779],"Ambérac":[45.852897,0.0664361],"Amiens":[49.8941708,2.2956951],"Angers":[47.4739884,-0.5515588],"Angliers":[46.2123558,-0.9528963],"Angoulême":[45.6484505,0.1561947],"Annecy":[45.8992348,6.1288847],"Anost":[47.0775079,4.098942],"Antibes":[43.5813878,7.1236966],"Antony":[48.753613,2.2958034],"Appietto":[42.0141295,8.768039],"Arbanats":[44.6771077,-0.3941156],"Arcangues":[43.4367292,-1.5216228],"Arcis-sur-Aube":[48.5362425,4.1421213],"Argelès-Gazost":[43.00511,-0.0997681],"Aurillac":[44.9285441,2.4433101],"Auxerre":[47.7961287,3.570579],"Availles-sur-Seiche":[47.961372,-1.1957981],"Avanton":[46.6630395,0.3044182],"Avignon":[43.9492493,4.8059012],"Bahus-Soubiran":[43.6736125,-0.356142],"Bailleul":[50.7396668,2.7349286],"Bain-de-Bretagne":[47.8414377,-1.6852229],"Banne":[44.3681,4.15405],"Banyuls-sur-Mer":[42.4794084,3.1275893],"Barjouville":[48.4101271,1.4793527],"Bazas":[44.4320456,-0.2126009],"Berstheim":[48.7930523,7.676655],"Bessèges":[44.2899584,4.1032582],"Biguglia":[42.6269896,9.4208224],"Biscarrosse":[44.3907065,-1.1609361],"Bonnelles":[48.6182,2.02973],"Bordeaux":[44.841225,-0.5800364],"Boudou":[44.096249,1.0132723],"Bouguenais":[47.179301,-1.6233691],"Bouliac":[44.8140115,-0.5036626],"Boulogne-Billancourt":[48.8356649,2.240206],"Bourg-Saint-Andéol":[44.3707629,4.6457565],"Bourg-de-Péage":[45.0354375,5.0520015],"Bourgoin-Jallieu":[45.5860438,5.2772265],"Breteuil":[49.6329792,2.2939649],"Bretignolles":[46.862924,-0.6068457],"Bruz":[48.0245814,-1.7471629],"Brézins":[45.3481942,5.3072813],"Bussy-le-Grand":[47.5738875,4.5175273],"Buthiers":[48.2847908,2.4268677],"Béthisy-Saint-Martin":[49.295264,2.8157232],"Béziers":[43.3426562,3.2131307],"Caen":[49.1813403,-0.3635615],"Caissargues":[43.7961462,4.3783053],"Campagnac":[44.0305,1.84449],"Carcassonne":[43.2130358,2.3491069],"Carpentras":[44.0554043,5.0487681],"Castelnau-Montratier":[44.2705036,1.3543304],"Castelsarrasin":[44.0395151,1.1072875],"Caussade":[44.1608142,1.5365375],"Cavaillon":[43.8356808,5.0383522],"Chalon-sur-Saône":[46.7831001,4.8534326],"Chamberet":[45.5824883,1.7213987],"Chambost-Allières":[46.0182362,4.4978593],"Champagnole":[46.7456049,5.9083581],"Champagné":[48.0168,0.33179],"Champlay":[47.9508644,3.4381639],"Chantonnay":[46.6868121,-1.0505509],"Chanverrie":[46.9466925,-0.9868361],"Charleval":[49.3720879,1.3835702],"Chartres":[48.4438601,1.4881434],"Chasse-sur-Rhône":[45.5789437,4.8114503],"Chavigny-Bailleul":[48.8757279,1.2042979],"Chevillon-sur-Huillard":[47.9627225,2.6251757],"Chinon":[47.1667182,0.2402095],"Châtellerault":[46.8180047,0.545812],"Châtenay-sur-Seine":[48.4176813,3.0961472],"Clermont-Ferrand":[45.7774551,3.0819427],"Cocumont":[44.4485645,0.0261176],"Codognan":[43.7292507,4.2213739],"Compiègne":[49.4179497,2.8263171],"Confolens":[46.0150236,0.6728934],"Corbelin":[45.6082,5.54285],"Cours":[44.3222497,0.5893145],"Coutras":[45.0407298,-0.1289533],"Crannes-en-Champagne":[47.980216,-0.0503318],"Diffembach-lès-Hellimer":[49.0027442,6.8423582],"Dijon":[47.3215806,5.0414701],"Dombasle-en-Xaintois":[48.3081,5.9924],"Dombasle-sur-Meurthe":[48.6231282,6.3493799],"Domène":[45.2013065,5.8388954],"Dosches":[48.320916,4.2493747],"Elne":[42.6015016,2.9705605],"Erdeven":[47.6417056,-3.1557523],"Esnandes":[46.250253,-1.1134192],"Espalion":[44.5207402,2.7615054],"Eymoutiers":[45.7389214,1.7432748],"Faleyras":[44.77098,-0.22758],"Ferrals-les-Corbières":[43.1474884,2.7263743],"Flagnac":[44.6037,2.24708],"Folcarde":[43.4039214,1.7933828],"Fontanil-Cornillon":[45.2556949,5.6654815],"Fontenay-Trésigny":[48.7100369,2.8722456],"Fontenilles":[43.5527351,1.1911389],"Franchevelle":[47.7399,6.45829],"Frangy":[46.0190661,5.9293421],"Fréjus":[43.4330308,6.7360182],"Gignac":[43.6522859,3.5512018],"Gilly-sur-Isère":[45.659271,6.3490978],"Gometz-la-Ville":[48.6718036,2.1250543],"Gourdon":[46.6414367,4.4461818],"Haut Valromey":[46.0432909,5.677973],"Hèches":[43.0174862,0.3737441],"Jaulges":[47.9618461,3.7888113],"Jurançon":[43.2871825,-0.3896425],"L'Isle-sur-la-Sorgue":[43.9185354,5.0515385],"La Boisse":[45.8416901,5.0328806],"La Chapelle-Bertrand":[46.6208761,-0.172649],"La Ciotat":[43.1758591,5.6062495],"La Crau":[43.1497034,6.0737053],"La Crèche":[46.3624398,-0.2970798],"La Hague":[49.6548321,-1.7991053],"La Malène":[44.302183,3.3201576],"La Ménitré":[47.4016646,-0.2702849],"La Rochelle":[46.159732,-1.1515951],"La Seyne-sur-Mer":[43.1007714,5.8788948],"La Turballe":[47.3468646,-2.5080068],"La Valette-du-Var":[43.1378245,5.9834654],"Lacanau":[44.9776088,-1.0784851],"Laigné-Saint-Gervais":[47.8686713,0.214428],"Landremont":[48.8506,6.1404],"Landévant":[47.7636187,-3.1194205],"Langres":[47.8639612,5.333947],"Lanton":[44.703858,-1.0388076],"Larnage":[45.0974,4.86284],"Laroque-Timbaut":[44.2839464,0.7614623],"Lauterbourg":[48.9751103,8.1767166],"Le Boulou":[42.5259989,2.8337158],"Le Genest-Saint-Isle":[48.0990232,-0.8869129],"Le Grand-Village-Plage":[45.8610217,-1.2356495],"Le Gua":[45.0216706,5.6452749],"Le Lion-d'Angers":[47.6270423,-0.7131041],"Le Quesne":[49.8627972,1.798255],"Le Rouget-Pers":[44.88412,2.2343859],"Le Soler":[42.6824044,2.8007536],"Lembeye":[43.4490168,-0.1120696],"Les Deux Alpes":[45.0099949,6.1237609],"Lespourcy":[43.3612745,-0.1489866],"Lille":[50.6365654,3.0635282],"Lisieux":[49.1460831,0.2255168],"Lyon":[45.7578137,4.8320114],"Lège-Cap-Ferret":[44.7951052,-1.1472098],"Lézignan-Corbières":[43.2008841,2.7574981],"Mailly-la-Ville":[47.5997137,3.6806676],"Malaucène":[44.1732744,5.1321258],"Malicorne-sur-Sarthe":[47.8144856,-0.0881093],"Marcq-en-Baroeul":[50.6767018,3.1043032],"Marseille":[43.2963986,5.3777888],"Matha":[45.8676762,-0.3191996],"Maurrin":[43.8254717,-0.3724441],"Merlevenez":[47.7359916,-3.2351341],"Messery":[46.3512824,6.2923899],"Meymac":[45.5366795,2.1464895],"Meyronne":[44.8763775,1.5784223],"Millau":[44.1006693,3.0777594],"Mimizan":[44.2019796,-1.2309278],"Mios":[44.6045208,-0.9349464],"Mitry-Mory":[48.9839674,2.6183971],"Montauban":[44.0175835,1.3549991],"Montbrison":[45.6072875,4.0627318],"Montbron":[45.6664226,0.4994516],"Montigny-le-Bretonneux":[48.7698937,2.0381228],"Montluçon":[46.3400296,2.6073963],"Montpellier":[43.6112422,3.8767337],"Montpeyroux":[44.9211111,0.0577778],"Morlaàs":[43.3454394,-0.2649452],"Mougins":[43.6008898,6.9963543],"Mérignac":[44.842168,-0.6469022],"Mérinchal":[45.9166064,2.4887302],"Méru":[49.2361978,2.1355087],"Naintré":[46.7638945,0.4823734],"Nancy":[48.6937223,6.1834097],"Nangis":[48.5549416,3.0136837],"Nantes":[47.2186371,-1.5541362],"Neuville-en-Ferrain, Nord-Pas-de-Calais":[50.750265,3.1525826],"Nexon":[45.6781476,1.1867578],"Noirmoutier-en-l'Île":[47.000089,-2.2441449],"Nouzonville":[49.814437,4.7445678],"Nègrepelisse":[44.0761111,1.5225],"Néris-les-Bains":[46.2898064,2.6583028],"Nîmes":[43.8374249,4.3600687],"Offranville":[49.8703506,1.0502415],"Pacy-sur-Eure":[49.0141954,1.38128],"Parentis-en-Born":[44.3508886,-1.0691145],"Passy":[46.5412837,4.5343419],"Pau":[43.2957547,-0.3685668],"Penne-d'Agenais":[44.3891155,0.8205394],"Penvénan":[48.8120152,-3.2973357],"Pernes-les-Fontaines":[43.9984627,5.059255],"Perpignan":[42.6985304,2.8953121],"Perriers-en-Beauficel":[48.7369321,-0.9972611],"Plaintel":[48.4088411,-2.8210576],"Pleine-Fougères":[48.5336672,-1.5638065],"Ploemeur":[47.7354591,-3.4270534],"Pollestres":[42.6420519,2.8709063],"Pont-de-Barret":[44.6009,5.00941],"Pont-à-Marcq":[50.5223657,3.1158401],"Pontours":[44.8363786,0.762536],"Pontpoint":[49.3023,2.65396],"Port-Saint-Père":[47.1381666,-1.7736876],"Porto-Vecchio":[41.5911382,9.2794469],"Puget-sur-Argens":[43.4561681,6.6844356],"Pérols":[43.5586003,3.9502006],"Pérouges":[45.903428,5.1794607],"Quillan":[42.8765847,2.1941009],"Quintin":[48.4036054,-2.9112669],"Quièvrecourt":[49.7343339,1.4227287],"Ramatuelle":[43.215142,6.6128041],"Rebets":[49.5111646,1.3907408],"Rethel":[49.5091447,4.3666467],"Rion-des-Landes":[43.9351768,-0.9224427],"Rivarennes":[47.2671145,0.3557458],"Rives de l'Yon":[46.5897363,-1.3368104],"Rivière-Saas-et-Gourby":[43.6883633,-1.1583595],"Rouairoux":[43.4915,2.57038],"Rousset-les-Vignes":[44.4190446,5.0617808],"Saint-Amand-Jartoudeix":[45.9145522,1.658191],"Saint-André":[43.273316,0.8514079],"Saint-André-de-Roquelongue":[43.114799,2.8364855],"Saint-Aubin-du-Cormier":[48.2577823,-1.4024515],"Saint-Christoly-Médoc":[45.3546805,-0.8292433],"Saint-Chély-d'Apcher":[44.8011363,3.2757824],"Saint-Ciers-Champagne":[45.4432366,-0.2998279],"Saint-Clair-du-Rhône":[45.4385057,4.7709862],"Saint-Cyprien":[44.8693315,1.0461817],"Saint-Dizier":[48.6371125,4.9473513],"Saint-Donat-sur-l'Herbasse":[45.1212493,4.9822895],"Saint-Estève":[42.7100287,2.8456715],"Saint-Fargeau":[47.6402988,3.0722102],"Saint-Gaudens":[43.1077682,0.7247218],"Saint-Girons":[42.9841865,1.1464455],"Saint-Géraud-de-Corps":[44.9520717,0.2268816],"Saint-Hippolyte-du-Fort":[43.9643602,3.8564364],"Saint-Jean-de-Liversay":[46.2709561,-0.8728577],"Saint-Laurent-les-Églises":[45.9457562,1.4991746],"Saint-Loubès":[44.9164747,-0.4269087],"Saint-Lô":[49.115808,-1.0909278],"Saint-Martin-d'Auxigny":[47.2041215,2.4175182],"Saint-Martin-le-Vieux":[45.7450003,1.1185406],"Saint-Maur-des-Fossés":[48.8033057,2.4853015],"Saint-Méen-le-Grand":[48.1894709,-2.1911338],"Saint-Paul":[44.9497487,-93.0931028],"Saint-Paul-sur-Save":[43.69629,1.2238796],"Saint-Porquier":[44.0051899,1.1782088],"Saint-Quentin-la-Poterie":[44.0444747,4.4416529],"Saint-Sulpice-de-Royan":[45.6721482,-1.0111628],"Saint-Vaury":[46.2040561,1.7563136],"Saint-Vincent-de-Paul":[44.9549798,-0.4692956],"Saint-Yvoine":[45.5849937,3.2313242],"Saint-Étienne-lès-Remiremont":[48.0203315,6.6110083],"Sainte-Maxime":[43.30871,6.637714],"Sainte-Savine":[48.2939552,4.0561847],"Salon-de-Provence":[43.6405237,5.0980225],"Sanary-sur-Mer":[43.1177238,5.8008839],"Sanguinet":[44.4834776,-1.0759377],"Sannois":[48.9717267,2.2568296],"Sapignicourt":[48.6510603,4.8130353],"Sarrians":[44.0831417,4.9717219],"Saurat":[42.8768386,1.5362899],"Schirmeck":[48.4787302,7.2181806],"Sens":[48.1978559,3.282606],"Serves-sur-Rhône":[45.1334,4.81791],"Sisco":[42.8109997,9.4885168],"Soissons":[49.3837621,3.327613],"Sommières":[43.7831093,4.0904546],"Sully-sur-Loire":[47.7654098,2.3738968],"Sèvremoine":[47.0877516,-1.0821288],"Targon":[44.73385,-0.26464],"Tarnos":[43.5405622,-1.4611915],"Tassin-la-Demi-Lune":[45.7598386,4.7657747],"Tavernes":[43.5937414,6.016304],"Teyran":[43.6829748,3.9247682],"Thorigné-Fouillard":[48.1535233,-1.5800238],"Tonnerre":[47.8565193,3.9733288],"Toulouse":[43.6044638,1.4442433],"Triel-sur-Seine":[48.980925,2.0030818],"Tulle":[45.2678347,1.7706797],"Tullins":[45.2977714,5.4829748],"Uzès":[44.0121279,4.4196718],"Valaurie":[44.4225104,4.8138874],"Valencin":[45.6127,5.01612],"Valognes":[49.5090696,-1.4706243],"Vaux-sur-Mer":[45.645335,-1.0623397],"Vensac":[45.3980138,-1.041989],"Verlhac-Tescou":[43.9302778,1.5388889],"Vesseaux":[44.650551,4.4413337],"Vic-la-Gardiole":[43.4869218,3.7961574],"Vic-le-Comte":[45.6433495,3.2433311],"Vieille-Toulouse":[43.5260801,1.4455571],"Villebois":[45.8464,5.43503],"Villefranche-de-Rouergue":[44.3517623,2.0375431],"Villejuif":[48.7921098,2.3633048],"Villenave-d'Ornon":[44.7737872,-0.5595029],"Vinassan":[43.2051,3.07427],"Voiron":[45.3631386,5.5910751],"Voulmentin":[46.9439459,-0.5146847],"Wattrelos":[50.7016015,3.2153907],"Yffiniac":[48.4846721,-2.6768534],"Yvetot":[49.6179384,0.7538866],"Évron":[48.1560603,-0.4029762]};</script>
 <script>window.SUIVI_4L = [
+ {
+  "id": "3246141105",
+  "titre": "Renault 4L moteur cléon 1108cm3",
+  "url": "https://www.leboncoin.fr/ad/voitures/3246141105",
+  "prix": 5500,
+  "ville": "Montigny-le-Bretonneux",
+  "vendeur": "Hugo",
+  "conv": "https://www.leboncoin.fr/messages/id/7e493167-71d2-432e-9b24-1d6aef25db16",
+  "date": "2026-08-27 09:59",
+  "msg": "Bonjour, elle a 117 000 km au compteur. Le châssis est en très bon état, on l’a repris avant de partir au 4l trophy, souder des plaques aux 4 coins du châssis (",
+  "statut": "reponse",
+  "prep": true,
+  "notes": "📄 Niveau mécanique elle tourne comme une horloge, nous avons changer le joint de culasse, fait la vidange moteur, la vidange boîte, le réglage soupape, le réglage carburateur, changer les courroies et les filtres, etc…",
+  "desc": "🚗Renault 4l de 1980 avec le moteur cléon 1108cm3 (le plus fiable).\n\nElle a fait le 4l Trophy 2026 sans aucune panne.\n\nLe châssis a été refait à neuf ! 👍\n\nNiveau mécanique elle tourne comme une horloge, nous avons changer le joint de culasse, fait la vidange moteur, la vidange boîte, le réglage soupape, le réglage carburateur, changer les courroies et les filtres, etc…\n\nLa carrosserie n’est pas au top, le pot d’échappement est à refixer, ainsi que les ailes avant.\n\nVendu avec CT -6 mois et CG✅\n\n👨‍🔧Équipement personnalisé :\nVolant de Mégane e-tech\n2 siège de golf 5 \n3 prise allume cigare et 4 usb \n2 enceintes puissantes \nManomètre de tension de batterie \nManomètre de température d’eau moteur\n2eme ventilateur sur radiateur\n4 phares led en plus \nUne galerie de toit\n\n🧰Tout le matériel nécessair",
+  "dist": 219,
+  "cr": {
+   "rouille": "sain",
+   "moteur": "cleon",
+   "ct": "valide",
+   "equip": "complet",
+   "fourni": "oui",
+   "raid": "2026",
+   "raison": "A fait le 4L Trophy 2026 sans panne ; moteur 1108 Cléon ; châssis refait à neuf ; équipement raid complet ; CT moins de 6 mois ; gros stock de pièces."
+  }
+ },
+ {
+  "id": "3248265313",
+  "titre": "Renault 4l",
+  "url": "https://www.leboncoin.fr/ad/voitures/3248265313",
+  "prix": 4200,
+  "ville": "Lille",
+  "vendeur": "maxence",
+  "conv": "https://www.leboncoin.fr/messages/id/845c75fa-c9b5-4abb-a6aa-fe0e600bb010",
+  "date": "2026-08-27 09:44",
+  "msg": "📷 2 photo(s)",
+  "statut": "reponse",
+  "prep": true,
+  "notes": "📄 Elle est vendue avec deux caisses de matériel et d’équipements utiles pour le raid. La voiture est donc prête à partir pour le 4L Trophy, idéale pour un équipage qui souhaite éviter toute la préparation et partir avec une base déjà équipée.",
+  "desc": "À vendre Renault 4L prête pour le 4L Trophy.\n\nLa voiture a été préparée et révisée pour pouvoir participer au 4L Trophy. Elle est vendue avec deux caisses de matériel et d’équipements utiles pour le raid.\n\nUne bâche est également fournie pour pouvoir protéger la voiture lorsqu’elle est stationnée dehors.\n\nLa voiture est donc prête à partir pour le 4L Trophy, idéale pour un équipage qui souhaite éviter toute la préparation et partir avec une base déjà équipée.\n\nPlus d’informations et photos sur demande.",
+  "dist": 1,
+  "cr": {
+   "rouille": "",
+   "moteur": "neuf",
+   "ct": "2027",
+   "equip": "partiel",
+   "fourni": "oui",
+   "raid": "",
+   "raison": "Préparée et révisée pour le Trophy, vendue avec 2 caisses de matériel et une bâche ; équipement non détaillé."
+  }
+ },
+ {
+  "id": "3224717497",
+  "titre": "4L en bel état",
+  "url": "https://www.leboncoin.fr/ad/voitures/3224717497",
+  "prix": 4600,
+  "ville": "Saint-Maur-des-Fossés",
+  "vendeur": "Marie Elisa",
+  "conv": "https://www.leboncoin.fr/messages/id/b66c5a95-f213-4306-ace2-8c4959f52dcc",
+  "date": "2026-08-27 08:55",
+  "msg": "Je vous envoie ça ce soir",
+  "statut": "reponse",
+  "prep": true,
+  "notes": "📄 Le contrôle technique est valide, valable pour les 6 prochains mois suivant l'achat. Préparée pour le 4L Trophy 2024, elle a été entretenue et abritée depuis. - disque, mécanisme et butée d'embrayage - câble d'accélérateur et d'embrayage",
+  "desc": "Nous vendons notre belle 4L, prête pour les rallyes !\nPréparée pour le 4L Trophy 2024, elle a été entretenue et abritée depuis. Le contrôle technique est valide, valable pour les 6 prochains mois suivant l'achat. \nElle vous accompagnera pour tous vos rallyes ou simplement pour vous amuser en roulant !\n\nVoici les changements mécaniques réalisés par un professionnel. \nRemplacements :\n- chaîne et tendeur de distribution\n- disque, mécanisme et butée d'embrayage \n- câble d'accélérateur et d'embrayage\n- courroies\n- silent bloc bras inférieur gauche et droit\n- sièges avant par sièges de Twingo 3\n\nRéparations :\n- freins avants et arrières\n- alternateur (charbon)\n- cardan, soufflets\n- carburateur, joints, bague axe papillon",
+  "dist": 207,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "valide",
+   "equip": "partiel",
+   "fourni": "",
+   "raid": "",
+   "raison": "Préparée pour le Trophy 2024 (participation non confirmée) ; CT valide 6 mois après achat ; changements mécaniques par professionnel"
+  }
+ },
+ {
+  "id": "3240522711",
+  "titre": "À vendre – Renault 4L GTL Berline de 1989",
+  "url": "https://www.leboncoin.fr/ad/voitures/3240522711",
+  "prix": 4800,
+  "ville": "Quièvrecourt",
+  "vendeur": "Edehedin",
+  "conv": "https://www.leboncoin.fr/messages/id/1d3e4e40-f54a-433c-88c5-5783a94f2697",
+  "date": "2026-08-27 08:53",
+  "msg": "📷 6 photo(s)",
+  "statut": "reponse",
+  "prep": true,
+  "notes": "⭐ RÉPONSE (13/08 12:58, 22 min !) : reste à raccorder le nouveau ventilateur + changer la courroie (en plus klaxon/capteur) ; châssis bon état général mais marques de corrosion (37 ans) ; CT valable jusqu'à MARS 2027 ; plaque protection moteur + crochets ; moteur Cléon confirmé ; 5 PHOTOS envoyées. 2 trophys 2015+2016, 110 659 km, 2 roues de secours fournies. 4 800 €, Quièvrecourt (153 km). CANDIDATE SÉRIEUSE.",
+  "desc": "Je mets en vente ma Renault 4L GTL Berline de 1989.\n\nCette 4L a participé au 4L Trophy à deux reprises, en 2015 et 2016, sans rencontrer le moindre problème mécanique durant ces deux éditions. Depuis, elle continue de rouler au moins une fois par an, afin d'être maintenue en bon état de fonctionnement.\n\nCaractéristiques :\n\nRenault 4L GTL Berline\nAnnée : 1989\nKilométrage : 110 659 km\nContrôle technique à jour\nChâssis en bon état\nLigne d'échappement inox à double sortie latérale (2021)\nÉquipée de sièges baquets\nBarre de LED au plafond, en parfait état de fonctionnement, avec allumage depuis l'intérieur de l'habitacle\nVendue avec deux roues de secours\nQuelques travaux sont à prévoir (changement de Klaxon, capteur de température moteur...)\nVendue en l'état\n\nVisible sur rendez-vous. N'hésitez p",
+  "dist": 153,
+  "cr": {
+   "rouille": "legere",
+   "moteur": "cleon",
+   "ct": "2027",
+   "equip": "partiel",
+   "fourni": "oui",
+   "raid": "2015",
+   "raison": "Participations Trophy 2015 et 2016 ; châssis en bon état ; CT à jour ; baquets, barre LED et 2 roues de secours."
+  }
+ },
+ {
+  "id": "3212555462",
+  "titre": "🚗 À VENDRE : Renault 4L 1982 – 170 000 km – Bon état – 4L Trophy",
+  "url": "https://www.leboncoin.fr/ad/voitures/3212555462",
+  "prix": 4000,
+  "ville": "Saint-Lô",
+  "vendeur": "Romy",
+  "conv": "https://www.leboncoin.fr/messages/id/f9207c17-4d5b-4853-a23b-ee18aa607b4b",
+  "date": "2026-08-27 08:52",
+  "msg": "🔍 Vérifiez les documents et l'historique du véhicule, 🚗 Essayez et inspectez le véhicule, 💶 Évaluez le prix du marché et négociez, 📆 Planifiez la transaction et",
+  "statut": "attente",
+  "prep": true,
+  "notes": "📄 — Année : 1982 · Kilométrage : 170 000 km Quelques petits travaux d'entretien courant restent à prévoir, mais dans l'ensemble elle est saine et prête à reprendre la route. Renault 4L de 1982 en très bon état général, couleur bordeaux.",
+  "desc": "Renault 4L de 1982 en très bon état général, couleur bordeaux.\n\n— Marque : Renault · Modèle : 4L\n— Année : 1982 · Kilométrage : 170 000 km\n— Carburant : Essence · Boîte : Manuelle\n— Couleur : Bordeaux · 5 portes · 2 sièges\n— Puissance fiscale : 4 CV\n— Contrôle technique valide jusqu'en janvier 2027\n\nQuelques petits travaux d'entretien courant restent à prévoir, mais dans l'ensemble elle est saine et prête à reprendre la route.",
+  "dist": 342,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "valide",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "Très bon état général, CT valide jusqu'en janvier 2027, petits travaux d'entretien à prévoir ; rouille et moteur non détaillés."
+  }
+ },
+ {
+  "id": "3251442671",
+  "titre": "Renault 4L équipée Trophy",
+  "url": "https://www.leboncoin.fr/ad/voitures/3251442671",
+  "prix": 4800,
+  "ville": "Lille",
+  "vendeur": "Jeanne",
+  "conv": "https://www.leboncoin.fr/messages/id/4a26478d-bb90-4201-a617-72706e7d46e7",
+  "date": "2026-08-26 11:10",
+  "msg": "📷 1 photo(s)",
+  "statut": "reponse",
+  "prep": true,
+  "notes": "⭐ CANDIDATE N°2 (AJOUT 27/08) : « Renault 4L équipée Trophy » À LILLE — a TERMINÉ le 4L Trophy 2023. Moteur Billancourt 845 (faible pour le raid), 156 000 km, CT OK. Pièces changées avant Trophy : amortisseurs, freins, roulements, câble embrayage, batterie. ÉQUIPEMENT : aménagement coffre bois, sièges C3, barre LED, attaches capot/coffre, 2 roues de secours, anneaux de remorquage, plaques de protection. 4 800 €, Lille (sur place). → À CONTACTER en priorité (local, éprouvé Trophy).",
+  "desc": "Bonjour,\n\nNous mettons en vente, à contre cœur, notre belle Renault 4L de 1984 qui a terminé le 4L Trophy 2023 !\n\n- Contrôle technique : OK\n- Moteur : Billancourt 845 cm3\n- Kilométrage : 156 000 km\n\nLes pièces changées avant le Trophy :\n- Amortisseurs\n- Freins\n- Roulements\n- Câble d’embrayage\n- Batterie\n- …\n\nLes + :\n- Aménagement du coffre en bois\n- Sièges confortables de C3 (facilement changeable)\n- Klaxon cucaracha : ambiance garantie !\n- Barre LED sur le capot\n- Système d’attaches pour capot et coffre\n- Equipements supplémentaires : 2 roues de secours, anneaux de remorquages, plaques de protection sous le châssis, amortisseurs neufs…\n\nVéhicule toujours garé à l’abri dans un garage, elle fera votre bonheur pour un prochain Trophy 😊\n\nN’hésitez pas à nous contacter pour plus d’informations",
+  "dist": 1,
+  "cr": {
+   "rouille": "",
+   "moteur": "billancourt",
+   "ct": "valide",
+   "equip": "complet",
+   "fourni": "",
+   "raid": "2023",
+   "raison": "A terminé le 4L Trophy 2023. Moteur Billancourt 845. Entièrement équipée raid (aménagement bois, roues, protection), CT ok."
+  }
+ },
+ {
+  "id": "3253175465",
+  "titre": "Renault 4l",
+  "url": "https://www.leboncoin.fr/ad/voitures/3253175465",
+  "prix": 4000.0,
+  "ville": "Saint-Étienne",
+  "vendeur": "Trophy42",
+  "conv": "https://www.leboncoin.fr/messages/id/129eb5c6-bec2-4b8a-bf54-c2b2447a4533",
+  "date": "2026-08-20 11:37",
+  "msg": "📷 1 photo(s)",
+  "statut": "reponse",
+  "prep": false,
+  "notes": "",
+  "desc": "",
+  "dist": 585,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "",
+   "equip": "",
+   "fourni": "",
+   "raid": ""
+  }
+ },
  {
   "id": "3195979978",
   "titre": "4l trophy",
@@ -419,31 +404,6 @@
    "fourni": "",
    "raid": "",
    "raison": "Moteur Billancourt ; équipée d'un girafon ; roule très bien ; aucune information rouille ou CT."
-  }
- },
- {
-  "id": "3240522711",
-  "titre": "À vendre – Renault 4L GTL Berline de 1989",
-  "url": "https://www.leboncoin.fr/ad/voitures/3240522711",
-  "prix": 4800,
-  "ville": "Quièvrecourt",
-  "vendeur": "Edehedin",
-  "conv": "https://www.leboncoin.fr/messages/id/1d3e4e40-f54a-433c-88c5-5783a94f2697",
-  "date": "2026-08-13 12:58",
-  "msg": "Je vous envoie des photos supplémentaires",
-  "statut": "reponse",
-  "prep": true,
-  "notes": "⭐ RÉPONSE (13/08 12:58, 22 min !) : reste à raccorder le nouveau ventilateur + changer la courroie (en plus klaxon/capteur) ; châssis bon état général mais marques de corrosion (37 ans) ; CT valable jusqu'à MARS 2027 ; plaque protection moteur + crochets ; moteur Cléon confirmé ; 5 PHOTOS envoyées. 2 trophys 2015+2016, 110 659 km, 2 roues de secours fournies. 4 800 €, Quièvrecourt (153 km). CANDIDATE SÉRIEUSE.",
-  "desc": "Je mets en vente ma Renault 4L GTL Berline de 1989.\n\nCette 4L a participé au 4L Trophy à deux reprises, en 2015 et 2016, sans rencontrer le moindre problème mécanique durant ces deux éditions. Depuis, elle continue de rouler au moins une fois par an, afin d'être maintenue en bon état de fonctionnement.\n\nCaractéristiques :\n\nRenault 4L GTL Berline\nAnnée : 1989\nKilométrage : 110 659 km\nContrôle technique à jour\nChâssis en bon état\nLigne d'échappement inox à double sortie latérale (2021)\nÉquipée de sièges baquets\nBarre de LED au plafond, en parfait état de fonctionnement, avec allumage depuis l'intérieur de l'habitacle\nVendue avec deux roues de secours\nQuelques travaux sont à prévoir (changement de Klaxon, capteur de température moteur...)\nVendue en l'état\n\nVisible sur rendez-vous. N'hésitez p",
-  "dist": 153,
-  "cr": {
-   "rouille": "legere",
-   "moteur": "cleon",
-   "ct": "2027",
-   "equip": "partiel",
-   "fourni": "oui",
-   "raid": "2015",
-   "raison": "Participations Trophy 2015 et 2016 ; châssis en bon état ; CT à jour ; baquets, barre LED et 2 roues de secours."
   }
  },
  {
@@ -1068,31 +1028,6 @@
   }
  },
  {
-  "id": "3224717497",
-  "titre": "4L en bel état",
-  "url": "https://www.leboncoin.fr/ad/voitures/3224717497",
-  "prix": 4600,
-  "ville": "Saint-Maur-des-Fossés",
-  "vendeur": "Marie Elisa",
-  "conv": "https://www.leboncoin.fr/messages/id/b66c5a95-f213-4306-ace2-8c4959f52dcc",
-  "date": "2026-07-01 13:08",
-  "msg": "📷 2 photo(s)",
-  "statut": "reponse",
-  "prep": true,
-  "notes": "📄 Le contrôle technique est valide, valable pour les 6 prochains mois suivant l'achat. Préparée pour le 4L Trophy 2024, elle a été entretenue et abritée depuis. - disque, mécanisme et butée d'embrayage - câble d'accélérateur et d'embrayage",
-  "desc": "Nous vendons notre belle 4L, prête pour les rallyes !\nPréparée pour le 4L Trophy 2024, elle a été entretenue et abritée depuis. Le contrôle technique est valide, valable pour les 6 prochains mois suivant l'achat. \nElle vous accompagnera pour tous vos rallyes ou simplement pour vous amuser en roulant !\n\nVoici les changements mécaniques réalisés par un professionnel. \nRemplacements :\n- chaîne et tendeur de distribution\n- disque, mécanisme et butée d'embrayage \n- câble d'accélérateur et d'embrayage\n- courroies\n- silent bloc bras inférieur gauche et droit\n- sièges avant par sièges de Twingo 3\n\nRéparations :\n- freins avants et arrières\n- alternateur (charbon)\n- cardan, soufflets\n- carburateur, joints, bague axe papillon",
-  "dist": 207,
-  "cr": {
-   "rouille": "",
-   "moteur": "",
-   "ct": "valide",
-   "equip": "partiel",
-   "fourni": "",
-   "raid": "",
-   "raison": "Préparée pour le Trophy 2024 (participation non confirmée) ; CT valide 6 mois après achat ; changements mécaniques par professionnel"
-  }
- },
- {
   "id": "3221911097",
   "titre": "4L préparée Trophy",
   "url": "https://www.leboncoin.fr/ad/voitures/3221911097",
@@ -1381,126 +1316,6 @@
   }
  },
  {
-  "id": "3163125658",
-  "titre": "4l",
-  "url": "https://www.leboncoin.fr/ad/voitures/3163125658",
-  "prix": null,
-  "ville": "",
-  "vendeur": "Marie",
-  "conv": "https://www.leboncoin.fr/messages/id/41f640d3-be77-4c42-82b0-106086a84c53",
-  "date": "2026-03-18 20:32",
-  "msg": "📷 5 photo(s)",
-  "statut": "reponse",
-  "prep": false,
-  "notes": "",
-  "desc": "",
-  "dist": null,
-  "cr": {
-   "rouille": "",
-   "moteur": "",
-   "ct": "",
-   "equip": "",
-   "fourni": "",
-   "raid": ""
-  }
- },
- {
-  "id": "3162738338",
-  "titre": "4l r4",
-  "url": "https://www.leboncoin.fr/ad/voitures/3162738338",
-  "prix": null,
-  "ville": "",
-  "vendeur": "LN",
-  "conv": "https://www.leboncoin.fr/messages/id/7d2ec8e9-5f3f-4aa9-aab0-8838c20fe631",
-  "date": "2026-03-18 08:34",
-  "msg": "pour moi il faut faire vidange, révision freins ar et parallélisme.",
-  "statut": "reponse",
-  "prep": false,
-  "notes": "",
-  "desc": "",
-  "dist": null,
-  "cr": {
-   "rouille": "",
-   "moteur": "",
-   "ct": "",
-   "equip": "",
-   "fourni": "",
-   "raid": ""
-  }
- },
- {
-  "id": "3160914290",
-  "titre": "4L Trophy",
-  "url": "https://www.leboncoin.fr/ad/voitures/3160914290",
-  "prix": null,
-  "ville": "",
-  "vendeur": "PL71120",
-  "conv": "https://www.leboncoin.fr/messages/id/5227e3e9-20ab-40ab-ba7e-a3853399112f",
-  "date": "2026-03-17 08:52",
-  "msg": "Bonjour. La 4L est vendue.",
-  "statut": "reponse",
-  "prep": true,
-  "notes": "",
-  "desc": "",
-  "dist": null,
-  "cr": {
-   "rouille": "",
-   "moteur": "",
-   "ct": "",
-   "equip": "",
-   "fourni": "",
-   "raid": ""
-  }
- },
- {
-  "id": "3162918557",
-  "titre": "Renault 4L",
-  "url": "https://www.leboncoin.fr/ad/voitures/3162918557",
-  "prix": null,
-  "ville": "",
-  "vendeur": "Plh",
-  "conv": "https://www.leboncoin.fr/messages/id/7f191a5a-b4e6-4e96-9e50-7239195ab9c9",
-  "date": "2026-03-16 18:38",
-  "msg": "Pour pouvoir fixer la tolle pour protéger le moteur",
-  "statut": "reponse",
-  "prep": false,
-  "notes": "",
-  "desc": "",
-  "dist": null,
-  "cr": {
-   "rouille": "",
-   "moteur": "",
-   "ct": "",
-   "equip": "",
-   "fourni": "",
-   "raid": ""
-  }
- },
- {
-  "id": "3046923193",
-  "titre": "Renault 4L – Ancienne du 4L Trophy 2025 – Vendue en l’état",
-  "url": "https://www.leboncoin.fr/ad/voitures/3046923193",
-  "prix": null,
-  "ville": "",
-  "vendeur": "Les laulies",
-  "conv": "https://www.leboncoin.fr/messages/id/509c3189-34c6-43b2-a167-3495b751df86",
-  "date": "2026-03-16 18:24",
-  "msg": "Je vous le joins.  Belle soirée !",
-  "statut": "reponse",
-  "prep": true,
-  "notes": "",
-  "desc": "",
-  "dist": null,
-  "cr": {
-   "rouille": "",
-   "moteur": "",
-   "ct": "",
-   "equip": "",
-   "fourni": "",
-   "raid": ""
-  }
- },
- {
   "id": "3229094154",
   "titre": "4l vente ou échange",
   "url": "https://www.leboncoin.fr/ad/voitures/3229094154",
@@ -1623,6 +1438,31 @@
    "fourni": "",
    "raid": "",
    "raison": "Description générique sans détails techniques ; rouille, moteur, CT et équipements absents"
+  }
+ },
+ {
+  "id": "3256675036",
+  "titre": "Renault 4L Clan de 1987",
+  "url": "https://www.leboncoin.fr/ad/voitures/3256675036",
+  "prix": 6000,
+  "ville": "Plourin-lès-Morlaix",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "📄 J’ai l’historique d’entretien depuis sa remise en état ainsi que les carnets d’entretien, de garantie, manuel d’utilisateur et clé de contact d’origine. La carte grise est à mon nom, en collection.",
+  "desc": "Bonjour,\n\nJe mets en vente une Renault 4L Clan de 1987, bleu brume, totalisant 276 400 km, kilométrage évolutif.\n\nAchetée en 2013, elle a eu droit à une restauration totale pendant 1 an, dossier photo à l’appui.\n\nJe m’en suis servi pendant près de 10 ans comme ma voiture principale. Je roule beaucoup moins depuis et j’ai décidé de m’en séparer.\n\nElle fonctionne bien, est complète, possède un attelage, le pack sécurité d’époque (deuxième rétroviseur extérieur, feux de recul et feu anti-brouillard), l’intérieur en skai noir et les jantes Fergat bi-ton.\n\nJ’ai l’historique d’entretien depuis sa remise en état ainsi que les carnets d’entretien, de garantie, manuel d’utilisateur et clé de contact d’origine. \n\nElle a cependant bien vécu et aurait droit à quelques petites retouches, je n’ai rien à",
+  "dist": 545,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "avenir",
+   "equip": "",
+   "fourni": "oui",
+   "raid": "",
+   "raison": "Restauration totale réalisée, châssis non détaillé. CT à faire avant la vente. Gros stock de pièces cédé avec le véhicule."
   }
  },
  {
@@ -2489,6 +2329,31 @@
   }
  },
  {
+  "id": "3210870766",
+  "titre": "4L de 1986 - excellent état",
+  "url": "https://www.leboncoin.fr/ad/voitures/3210870766",
+  "prix": 5500,
+  "ville": "Saint-Hilaire-de-Riez",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": true,
+  "notes": "⭐ (27/08) : « 4L de 1986 excellent état » — a participé et TERMINÉ le 4L Trophy 2026 sans panne majeure. Moteur Billancourt. CT valide (seule remarque : déséquilibre freinage AR en défaillance mineure). Radiateur/alternateur/silencieux/tube échappement/faisceau bougies neufs. Compteur REMPLACÉ (ancien ~100 000 km, nouveau à confirmer). 5 500 €, Saint-Hilaire-de-Riez (Pays de la Loire).",
+  "desc": "Je vends ma Renault 4L équipée du moteur Billancourt, qui a participé au 4L Trophy 2026 et a terminé l'aventure sans aucune panne majeure.\n\nLe véhicule est en bon état mécanique et roule parfaitement. Il a récemment passé le contrôle technique.\n\nContrôle technique\n- CT valide\n- Seule remarque : déséquilibre du freinage arrière en défaillance mineure\n\nEntretien et pièces remplacées\n- Radiateur neuf\n- Alternateur neuf\n- Silencieux neuf\n- Tube d'échappement neuf\n- Faisceau de bougies neuf\n\nLe compteur de vitesse a été remplacé :\n- Ancien compteur disponible, affichant environ 100 000 km\n- Nouveau compteur actuellement à 166 000 km\n\nLe moteur a donc environ 100 000 km.\n\nFiabilité\nCette 4L a parcouru l'intégralité du 4L Trophy 2026 sans panne majeure. Elle a été préparée et entretenue pour les ",
+  "dist": 569,
+  "cr": {
+   "rouille": "",
+   "moteur": "billancourt",
+   "ct": "valide",
+   "equip": "complet",
+   "fourni": "oui",
+   "raid": "2026",
+   "raison": "A participé au 4L Trophy 2026. Moteur Billancourt. CT valide. Matériel raid et pièces de rechange fournis."
+  }
+ },
+ {
   "id": "3248645917",
   "titre": "Renault 4L",
   "url": "https://www.leboncoin.fr/ad/voitures/3248645917",
@@ -2536,6 +2401,31 @@
    "fourni": "",
    "raid": "",
    "raison": "Moteur et freins refaits avec factures ; rouille de surface sur châssis ; carrosserie dans son jus."
+  }
+ },
+ {
+  "id": "3256450407",
+  "titre": "4 l 1981",
+  "url": "https://www.leboncoin.fr/ad/voitures/3256450407",
+  "prix": 2500,
+  "ville": "La Fouillouse",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "📄 Je vends ma Renault 4L pour restauration de 1981, une citadine emblématique et attachante avec 136 000 km au compteur. - Boîte de vitesses : Manuelle - Kilométrage : 136 000 km",
+  "desc": "Je vends ma Renault 4L pour restauration de 1981, une citadine emblématique et attachante avec 136 000 km au compteur.\n- Marque : Renault\n- Modèle : 4L\n- Année : 1981\n- Kilométrage : 136 000 km\n- Carburant : Essence\n- Motorisation : 4 Ch\n- Boîte de vitesses : Manuelle\n- Couleur : Bleu\n- Nombre de portes : 4\n- Nombre de sièges : 5\n- Puissance fiscale : 4 Cv\nN'hésitez pas à me contacter pour plus d'informations",
+  "dist": 578,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "Vendue pour restauration, peu de détails techniques fournis."
   }
  },
  {
@@ -3039,6 +2929,31 @@
   }
  },
  {
+  "id": "3257089816",
+  "titre": "Renault 4l",
+  "url": "https://www.leboncoin.fr/ad/voitures/3257089816",
+  "prix": 5000,
+  "ville": "Entrelacs",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "(27/08) : Renault 4L Clan 1989 à Entrelacs (Savoie), 119 000 km, MOTEUR 1.1l CLÉON ✓, aucune corrosion châssis ✓, intérieur cuir origine état neuf. Fait 2019 allumage/embrayage/bougies, 2024 pneus + mâchoires AR. ⚠️ Piston mâchoire AR à prévoir (perte sur gros freinage) + CTR à faire. Donne beaucoup de pièces. 5 000 € à débattre. → Cléon + châssis sain, mais freinage et CT à traiter.",
+  "desc": "Renault 4l 1989 CLAN 119000km\n1.1l essence \nTrès bonne état général \nIntérieur cuire d’origine état neuf \nTout fonctionnement parfaitement. Aucune corrosion châssis . \n \nFait en 2019:\nAllumage complet \nEmbrayage \nBougie\n\nFait en 2024:\nPneu 4 saison \nMâchoire arrière \n\nÀ prévoir :\nPiston mâchoire arrière\nFreine  bien mais perte sur gros freinage . Peu rouler sur trajet simple. \nContrôle technique à faire \n\nDonne avec pas mal de pièce ( feux arrière, pare boue..)\n\n5000€ à débatte ou échange contre vélo moto électrique",
+  "dist": 579,
+  "cr": {
+   "rouille": "",
+   "moteur": "cleon",
+   "ct": "avenir",
+   "equip": "",
+   "fourni": "oui",
+   "raid": "",
+   "raison": "Moteur 1.1l Cléon. Aucune corrosion châssis mais pas de travaux précisés. CT à faire. Pièces fournies."
+  }
+ },
+ {
   "id": "3234927812",
   "titre": "R4 Renault 4",
   "url": "https://www.leboncoin.fr/ad/voitures/3234927812",
@@ -3430,6 +3345,31 @@
    "fourni": "",
    "raid": "",
    "raison": "Saine de carrosserie et de plancher, pas de corrosion ; galerie ; révision juillet 2026 et grosses factures 2024-2025 ; carte grise collection"
+  }
+ },
+ {
+  "id": "3255568445",
+  "titre": "4l f4",
+  "url": "https://www.leboncoin.fr/ad/voitures/3255568445",
+  "prix": 3500,
+  "ville": "Linxe",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "📄 Vend une belle 4l f4 en bon etat Circuit d'essence remis a neuf Allumage remis a neuf Controle freinage",
+  "desc": "Vend une belle 4l f4 en bon etat\nCircuit d'essence remis a neuf\nBatterie neuve\nAllumage remis a neuf\nPneu avant neuf\nControle freinage\nPeinture raptor interieur et panneau de porte en alu\nDemarre et roule trés bien\nPour plus d'info me contacter",
+  "dist": 813,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "Bon état général, circuit essence et allumage refaits. Peu de détails sur châssis, moteur ou CT."
   }
  },
  {
@@ -4008,6 +3948,31 @@
   }
  },
  {
+  "id": "3219673884",
+  "titre": "Renault 4 4L Savane – 1992 – 48 750 km",
+  "url": "https://www.leboncoin.fr/ad/voitures/3219673884",
+  "prix": 4500,
+  "ville": "Châtenay-Malabry",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": true,
+  "notes": "📄 Achetée à une première main en 1998, faible kilometrage, très bien entretenue par garage Renault (pieces d'origine). Historique et factures disponibles.",
+  "desc": "Achetée à une première main en 1998, faible kilometrage, très bien entretenue par garage Renault (pieces d'origine). Historique et factures disponibles. Batterie neuve.",
+  "dist": 215,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "Très bien entretenue en garage Renault, faible kilométrage. Aucun détail sur rouille, moteur, CT ou raid."
+  }
+ },
+ {
   "id": "3245534875",
   "titre": "Vends renault 4 gtl annee 1982",
   "url": "https://www.leboncoin.fr/ad/voitures/3245534875",
@@ -4055,6 +4020,31 @@
    "fourni": "oui",
    "raid": "2023",
    "raison": "4L Trophy 2023 ; moteur Cléon ; CT effectué pour la vente ; plaques de protection ; nombreuses pièces incluses."
+  }
+ },
+ {
+  "id": "3257021416",
+  "titre": "4L clan 1989",
+  "url": "https://www.leboncoin.fr/ad/voitures/3257021416",
+  "prix": 5000,
+  "ville": "Prades",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "(27/08) : 4L Clan 1989 à Prades, 169 000 km, CT valide jusqu'à 03/2027. Description pauvre (annonce type), rien sur châssis/moteur/équipement → à questionner. 5 000 €.",
+  "desc": "Je vends ma Renault 4L de 1989, une citadine emblématique et attachante avec 169 000 km au compteur.\n- Marque : Renault\n- Modèle : 4L\n- Année : 1989\n- Kilométrage : 169 000 km\n- Motorisation : 4 Ch\n- Carburant : Essence\n- Boîte de vitesses : Manuelle\n- Couleur : Rouge\n- Nombre de portes : 4\n- Nombre de sièges : 4\n- Puissance fiscale : 4 Cv\n- Contrôle technique : Valide jusqu'en 03/2027\n- Crit'air : Non classé\nN'hésitez pas à me contacter pour plus d'informations ou pour organiser une visite.",
+  "dist": 784,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "valide",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "CT valide jusqu'en 03/2027. Aucune mention de corrosion, moteur ou équipement raid."
   }
  },
  {
@@ -4230,6 +4220,30 @@
    "fourni": "",
    "raid": "",
    "raison": "CT non passé pour corrosion principale ; corrosion significative ; 230 510 km ; aucune mention moteur."
+  }
+ },
+ {
+  "id": "3252184617",
+  "titre": "Voiture Renault 4L Savane année 91",
+  "url": "https://www.leboncoin.fr/ad/voitures/3252184617",
+  "prix": 4500,
+  "ville": "La Chapelle-Saint-Luc",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": true,
+  "notes": "📄 Voiture 4L Savane",
+  "desc": "Voiture 4L Savane",
+  "dist": 267,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "",
+   "equip": "",
+   "fourni": "",
+   "raid": ""
   }
  },
  {
@@ -4433,31 +4447,6 @@
   }
  },
  {
-  "id": "3248265313",
-  "titre": "Renault 4l",
-  "url": "https://www.leboncoin.fr/ad/voitures/3248265313",
-  "prix": 4200,
-  "ville": "Lille",
-  "vendeur": "—",
-  "conv": "",
-  "date": "",
-  "msg": "—",
-  "statut": "attente",
-  "prep": true,
-  "notes": "📄 Elle est vendue avec deux caisses de matériel et d’équipements utiles pour le raid. La voiture est donc prête à partir pour le 4L Trophy, idéale pour un équipage qui souhaite éviter toute la préparation et partir avec une base déjà équipée.",
-  "desc": "À vendre Renault 4L prête pour le 4L Trophy.\n\nLa voiture a été préparée et révisée pour pouvoir participer au 4L Trophy. Elle est vendue avec deux caisses de matériel et d’équipements utiles pour le raid.\n\nUne bâche est également fournie pour pouvoir protéger la voiture lorsqu’elle est stationnée dehors.\n\nLa voiture est donc prête à partir pour le 4L Trophy, idéale pour un équipage qui souhaite éviter toute la préparation et partir avec une base déjà équipée.\n\nPlus d’informations et photos sur demande.",
-  "dist": 1,
-  "cr": {
-   "rouille": "",
-   "moteur": "neuf",
-   "ct": "2027",
-   "equip": "partiel",
-   "fourni": "oui",
-   "raid": "",
-   "raison": "Préparée et révisée pour le Trophy, vendue avec 2 caisses de matériel et une bâche ; équipement non détaillé."
-  }
- },
- {
   "id": "3238042935",
   "titre": "RENAULT 4L Savane",
   "url": "https://www.leboncoin.fr/ad/voitures/3238042935",
@@ -4480,6 +4469,31 @@
    "fourni": "",
    "raid": "",
    "raison": "Vente pro sans détail : Savane, 4 pneus neufs ; aucune info mécanique ou CT."
+  }
+ },
+ {
+  "id": "3256806282",
+  "titre": "Renault 4l f4",
+  "url": "https://www.leboncoin.fr/ad/voitures/3256806282",
+  "prix": 3000,
+  "ville": "Chavanay",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "📄 Je la vends sans ct car plusieurs sont chose a refaire et je n’est pas le temps de m’en occupé Idéale pour les amateurs de véhicules de collection ou pour un projet de restauration. Le véhicule est en plutôt bonne état pour son âge. Je vends cette Renault 4L F",
+  "desc": "Je vends cette Renault 4L F4, \nIdéale pour les amateurs de véhicules de collection ou pour un projet de restauration.\nLe véhicule est en plutôt bonne état pour son âge. \nJe la vends sans ct car plusieurs sont chose a refaire et je n’est pas le temps de m’en occupé\nPas de corrosion perforante\nPneu a changer \nCompteur de vitesse qui ne fonctionne plus\nContacté moi pour plus d’informations.",
+  "dist": 593,
+  "cr": {
+   "rouille": "legere",
+   "moteur": "",
+   "ct": "attention",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "Pas de corrosion perforante, vendue sans CT car réparations à prévoir."
   }
  },
  {
@@ -4733,6 +4747,56 @@
   }
  },
  {
+  "id": "3256986579",
+  "titre": "Renault 4l",
+  "url": "https://www.leboncoin.fr/ad/voitures/3256986579",
+  "prix": 5000,
+  "ville": "Plouisy",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "📄 Carte grise collection ( coût moindre) contrôle technique tout les 5 ans. Ct de moins de 6 mois valide.",
+  "desc": "4l de 1981 \nBon état \nCt de moins de 6 mois valide. \nCarte grise collection ( coût moindre)\ncontrôle technique tout les 5 ans. \nVisible sur rdv",
+  "dist": 504,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "valide",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "CT de moins de 6 mois valide, carte grise collection. Aucun détail sur rouille, moteur ou raid."
+  }
+ },
+ {
+  "id": "3255234071",
+  "titre": "4 L ,controle technique recent ok",
+  "url": "https://www.leboncoin.fr/ad/voitures/3255234071",
+  "prix": 4200,
+  "ville": "Montalieu-Vercieu",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "📄 frein , pneus , allumage, amortisseurs, neufs embrayage  recent, traitee anti-rouille.",
+  "desc": "je vend ma 4L par manque de place dans mon garage,\nfrein , pneus , allumage, amortisseurs, neufs embrayage  recent, \ntraitee anti-rouille.\ncarrosserie et interieur à revoir.\n  roule trés bien.",
+  "dist": 563,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "valide",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "CT récent ok, traitée anti-rouille. Carrosserie et intérieur à revoir, moteur non précisé."
+  }
+ },
+ {
   "id": "3247505288",
   "titre": "Vend Renault 4 f6",
   "url": "https://www.leboncoin.fr/ad/voitures/3247505288",
@@ -4755,6 +4819,30 @@
    "fourni": "",
    "raid": "",
    "raison": "Plateforme restaurée blaxonée peinture époxy ; moteur échange standard peu roulé ; CT parfait ; freins et amortisseurs neufs."
+  }
+ },
+ {
+  "id": "3257372713",
+  "titre": "4 l",
+  "url": "https://www.leboncoin.fr/ad/voitures/3257372713",
+  "prix": 3500,
+  "ville": "Langouet",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "📄 vend 4 l etat general correct",
+  "desc": "vend 4 l etat general correct",
+  "dist": 441,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "",
+   "equip": "",
+   "fourni": "",
+   "raid": ""
   }
  },
  {
@@ -4808,28 +4896,28 @@
   }
  },
  {
-  "id": "3212555462",
-  "titre": "🚗 À VENDRE : Renault 4L 1982 – 170 000 km – Bon état – 4L Trophy",
-  "url": "https://www.leboncoin.fr/ad/voitures/3212555462",
-  "prix": 4000,
-  "ville": "Saint-Lô",
+  "id": "3253848563",
+  "titre": "Renault 4l",
+  "url": "https://www.leboncoin.fr/ad/voitures/3253848563",
+  "prix": 2000,
+  "ville": "Saint-Amand-Montrond",
   "vendeur": "—",
   "conv": "",
   "date": "",
   "msg": "—",
   "statut": "attente",
   "prep": true,
-  "notes": "📄 — Année : 1982 · Kilométrage : 170 000 km Quelques petits travaux d'entretien courant restent à prévoir, mais dans l'ensemble elle est saine et prête à reprendre la route. Renault 4L de 1982 en très bon état général, couleur bordeaux.",
-  "desc": "Renault 4L de 1982 en très bon état général, couleur bordeaux.\n\n— Marque : Renault · Modèle : 4L\n— Année : 1982 · Kilométrage : 170 000 km\n— Carburant : Essence · Boîte : Manuelle\n— Couleur : Bordeaux · 5 portes · 2 sièges\n— Puissance fiscale : 4 CV\n— Contrôle technique valide jusqu'en janvier 2027\n\nQuelques petits travaux d'entretien courant restent à prévoir, mais dans l'ensemble elle est saine et prête à reprendre la route.",
-  "dist": 342,
+  "notes": "📄 Bonjour je vend cette Renault 4L en l'état et sans contrôle technique. Véhicule idéal pour une personne souhaitant se lancer dans un projet de restauration ou dans une course comme le 4L Trophy.",
+  "desc": "Bonjour je vend cette Renault 4L en l'état et sans contrôle technique.\n\nLa 4l démarre se déplace, tout fonctionne clignotant phares essuie glace ect... \nComme toute les 4l elle a un peux de rouille mais rien de bien méchant. \n\n Véhicule idéal pour une personne souhaitant se lancer dans un projet de restauration ou dans une course comme le 4L Trophy.\n\nJe donne avec une autre 4l complète pour les pièces. \n\n D'autres photos sont disponibles sur demande, si vous souhaitez plus de détails appelez moi. \n\nPrix : 2000 € négociable",
+  "dist": 436,
   "cr": {
-   "rouille": "",
+   "rouille": "legere",
    "moteur": "",
-   "ct": "valide",
+   "ct": "attention",
    "equip": "",
-   "fourni": "",
+   "fourni": "oui",
    "raid": "",
-   "raison": "Très bon état général, CT valide jusqu'en janvier 2027, petits travaux d'entretien à prévoir ; rouille et moteur non détaillés."
+   "raison": "Légère rouille sans gravité, vendue sans CT. Une seconde 4L complète donnée pour les pièces. Prête pour un projet Trophy sans avoir participé."
   }
  },
  {
@@ -5533,6 +5621,31 @@
   }
  },
  {
+  "id": "3255825954",
+  "titre": "Renault R4 1969",
+  "url": "https://www.leboncoin.fr/ad/voitures/3255825954",
+  "prix": 3990,
+  "ville": "Thionville",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": true,
+  "notes": "(27/08) : Renault R4 1969 à Thionville, CHÂSSIS ET PLANCHER TRAITÉS en 2023 + embrayage/pneus/freins/trains avant refaits. CT ok récent. ⚠️ Carrosserie restante à faire + petites pièces (certaines fournies). 3 990 €. → 1969 = très ancien modèle (électrique 6V), à vérifier fiabilité pour le raid.",
+  "desc": "Rare Renault 4L de 1969 en 6 volts calandre alu.\nCt ok récent.\nDe nombreux travaux ont été réalisés en 2023,dont le châssis et plancher traités,embrayage pneus,freins,trains avant etc…\nIl reste la carrosserie à faire ,et des bricoles je dispose de certaines pièces.\nPAS SÉRIEUX S’ABSTENIR",
+  "dist": 263,
+  "cr": {
+   "rouille": "sain",
+   "moteur": "",
+   "ct": "valide",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "Châssis et plancher traités en 2023, CT ok récent. Carrosserie restant à faire."
+  }
+ },
+ {
   "id": "3245404800",
   "titre": "4l à remonter complète",
   "url": "https://www.leboncoin.fr/ad/voitures/3245404800",
@@ -6183,6 +6296,31 @@
   }
  },
  {
+  "id": "3255627223",
+  "titre": "4l savane",
+  "url": "https://www.leboncoin.fr/ad/voitures/3255627223",
+  "prix": 4200,
+  "ville": "Gujan-Mestras",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": true,
+  "notes": "📄 Carte grise collection CT valable 5 ans jusqu'au 20/08/2031 Ct : défauts mineurs CT collection exigeant, et rigoureux le moindre poc et il y a une ligne de défaut ne pas prendre peur ! Freins neufs ( Disques / Étriers / Plaquettes / Flexibles )",
+  "desc": "4l savane 1988\n188350 kms\nCarte grise collection CT valable 5 ans jusqu'au 20/08/2031\nÉtat  correct = jamais restaurée \nUsage quotidien\nAttelage\nAppuis tête \nFreins neufs ( Disques / Étriers / Plaquettes / Flexibles )\nCt : défauts mineurs CT collection exigeant, et rigoureux le moindre poc et il y a une ligne de défaut ne pas prendre peur !\nDétails sur demande \nPas de marchandage via lbc ou au téléphone merci",
+  "dist": 734,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "valide",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "CT valable jusqu'en 08/2031. Jamais restaurée, défauts mineurs. Aucune mention de rouille ou raid."
+  }
+ },
+ {
   "id": "3218431577",
   "titre": "4 l",
   "url": "https://www.leboncoin.fr/ad/voitures/3218431577",
@@ -6355,6 +6493,31 @@
    "fourni": "",
    "raid": "",
    "raison": "Description très courte ; bon état pour son âge, demande qu'à rouler ; aucun détail technique"
+  }
+ },
+ {
+  "id": "3254666532",
+  "titre": "Renault 4L",
+  "url": "https://www.leboncoin.fr/ad/voitures/3254666532",
+  "prix": 5000,
+  "ville": "Hochfelden",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "📄 - Nombreuses réparations et restaurations effectuées ( environ 1800 € de réparation, factures à l'appui) depuis mon acquisition en 2022, notamment les freins, le châssis, carosserie et démarreur.",
+  "desc": "Je vends ma 4L (type 4TL R 1123) de 1986,\nContrôle technique validé jusqu'en septembre 2027.\n Véhicule fiable qui roule presque tous les jours et qui démarre au quart de tour : moteur fonctionne parfaitement.\n\nPoints forts :\n- faible kilométrage \n- contrôle technique valide\n- prête à prendre la route immédiatement.\n- Nombreuses réparations et restaurations effectuées ( environ 1800 € de réparation, factures à l'appui) depuis mon acquisition en 2022, notamment les freins, le châssis, carosserie et démarreur.\n\nA noter:\n- véhicule dans son jus.\n- carrosserie présente des défauts donc prévoir travaux cosmétiques ou peinture si vous le souhaitez.\n- intérieur : la plafonnier (ciel de toit) est à revoir.\n\nPrix: 5000€ ( négociable raisonnablement)\nPersonne sérieuse uniquement. Curieux s'abstenir, ",
+  "dist": 385,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "valide",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "CT validé jusqu'en 09/2027. Réparations effectuées dont châssis, pas de précision corrosion. Véhicule dans son jus."
   }
  },
  {
@@ -6532,31 +6695,6 @@
   }
  },
  {
-  "id": "3246141105",
-  "titre": "Renault 4L moteur cléon 1108cm3",
-  "url": "https://www.leboncoin.fr/ad/voitures/3246141105",
-  "prix": 5500,
-  "ville": "Montigny-le-Bretonneux",
-  "vendeur": "—",
-  "conv": "",
-  "date": "",
-  "msg": "—",
-  "statut": "attente",
-  "prep": false,
-  "notes": "📄 Niveau mécanique elle tourne comme une horloge, nous avons changer le joint de culasse, fait la vidange moteur, la vidange boîte, le réglage soupape, le réglage carburateur, changer les courroies et les filtres, etc…",
-  "desc": "🚗Renault 4l de 1980 avec le moteur cléon 1108cm3 (le plus fiable).\n\nElle a fait le 4l Trophy 2026 sans aucune panne.\n\nLe châssis a été refait à neuf ! 👍\n\nNiveau mécanique elle tourne comme une horloge, nous avons changer le joint de culasse, fait la vidange moteur, la vidange boîte, le réglage soupape, le réglage carburateur, changer les courroies et les filtres, etc…\n\nLa carrosserie n’est pas au top, le pot d’échappement est à refixer, ainsi que les ailes avant.\n\nVendu avec CT -6 mois et CG✅\n\n👨‍🔧Équipement personnalisé :\nVolant de Mégane e-tech\n2 siège de golf 5 \n3 prise allume cigare et 4 usb \n2 enceintes puissantes \nManomètre de tension de batterie \nManomètre de température d’eau moteur\n2eme ventilateur sur radiateur\n4 phares led en plus \nUne galerie de toit\n\n🧰Tout le matériel nécessair",
-  "dist": 219,
-  "cr": {
-   "rouille": "sain",
-   "moteur": "cleon",
-   "ct": "valide",
-   "equip": "complet",
-   "fourni": "oui",
-   "raid": "2026",
-   "raison": "A fait le 4L Trophy 2026 sans panne ; moteur 1108 Cléon ; châssis refait à neuf ; équipement raid complet ; CT moins de 6 mois ; gros stock de pièces."
-  }
- },
- {
   "id": "3239017956",
   "titre": "4l",
   "url": "https://www.leboncoin.fr/ad/voitures/3239017956",
@@ -6604,6 +6742,31 @@
    "fourni": "",
    "raid": "",
    "raison": "Description très courte ; roule régulièrement donc aucun problème ; rien de détaillé"
+  }
+ },
+ {
+  "id": "3256807766",
+  "titre": "Renault 4 R4 4L",
+  "url": "https://www.leboncoin.fr/ad/voitures/3256807766",
+  "prix": 5900,
+  "ville": "Labastidette",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "(27/08) : Renault 4 R4 1988, ancien véhicule de gendarmerie DGA Toulon, ENTIÈREMENT RESTAURÉ en 2023 (plancher, longeron AR, carrosserie, peinture, freins, roulements, cardans, sellerie, joints — NEUFS). Moteur Cléon 956 cm³, 122 900 km, dossiers photos + factures. 5 900 €, Labastidette. → Base saine et restaurée, mais cher et moteur 956 (proche Billancourt, faible).",
+  "desc": "### Vend Renault 4 R4 4L R4TL ###\n… Bien Lire l’annonce jusqu’au bout, merci…\n… Du 01/1988 …\n… Avec 122900 km …\n… Moteur Cléon 956 cm3 …\n… Ancien véhicule de gendarmerie sur site DGA Toulon …\n… Entièrement restauré en 2023 …\n… Dossiers photos à l’appui avec factures…\n… Carrosserie, plancher, longeron arrière, peinture complète intérieur et extérieur, biellettes, rotules, freins, roulements, cardans, amortisseurs, sellerie, moquette, joints de portes et hayon, Pare brise et son joint , essuie glace, NEUFS etc …\n… Vidange moteur et liquide de refroidissement fait à 122900km plus filtre à huile…\n… Haut moteur refait en 2019 : joints de culasse, chaîne de distribution, pompe à eau…\n… Manomètre température d’eau sur tableau de bord…\n… Et Prise allume cigare …\n… Interrupteur de marche forcée ven",
+  "dist": 809,
+  "cr": {
+   "rouille": "sain",
+   "moteur": "cleon",
+   "ct": "",
+   "equip": "partiel",
+   "fourni": "oui",
+   "raid": "",
+   "raison": "Entièrement restaurée en 2023, plancher et longeron refaits. Moteur Cléon. Prise allume-cigare. Nombreuses pièces et moteur fournis."
   }
  },
  {
@@ -6804,6 +6967,31 @@
    "fourni": "oui",
    "raid": "",
    "raison": "CT ok, rien à prévoir ; vendue avec quelques pièces de rechange ; démarre au quart de tour, réparations principales faites"
+  }
+ },
+ {
+  "id": "3257251804",
+  "titre": "Renault 4l",
+  "url": "https://www.leboncoin.fr/ad/voitures/3257251804",
+  "prix": 6000,
+  "ville": "Saint-Joachim",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "📄 Pompe a essence neuve , demareur neuf  . Son état est correct pour son âge . Plancher et sous bassement sains . Mamie mériterait une peinture neuve pour lui redonner tout son éclat",
+  "desc": "Cause autre projet , vends Renault 4l 6 volts de 1967 .\nSon état est correct pour son âge . Plancher et sous bassement sains .\nRoule parfaitement .\nPompe a essence neuve , demareur neuf  .\nMamie mériterait une peinture neuve pour lui redonner tout son éclat",
+  "dist": 526,
+  "cr": {
+   "rouille": "sain",
+   "moteur": "",
+   "ct": "",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "Plancher et sous-bassement sains. Pompe à essence et démarreur neufs. Pas de CT mentionné."
   }
  },
  {
@@ -7382,6 +7570,31 @@
   }
  },
  {
+  "id": "3256021556",
+  "titre": "4L F4 1984 - France Telecom",
+  "url": "https://www.leboncoin.fr/ad/voitures/3256021556",
+  "prix": 4500,
+  "ville": "Rennes",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "⚠️ (27/08) : 4L F4 1984 « France Telecom » à Rennes, dort au garage 2 ans suite à DÉFAUT DE FREIN (« ne freine vraiment pas beaucoup »). CT NON à jour. Révision 2026 : double vidange, pompe à essence, maître cylindre frein. CHÂSSIS DE REFABRICATION (Melun Rétro), factures dispo. 4 500 €. → À VÉRIFIER : la réparation frein est faisable, base F4 correcte mais CT à repasser et freinage à refaire.",
+  "desc": "je vends ma 4L, deux ans quelle dors tranquillement au garage suite défaut de frein.\n\ncontrole technique non à jour \n\nrévision réalisé cette année par mes soins, double vidange et remplacement pompe à essence et maitre cylindre de frein.\n\nne freine vraiment pas beaucoup, je n'ai pas le temps de m'en occuper je préfère la vendre à quelqu'un qui saura en prendre soins.\n\nChassis de refabrication melun retro, plusieurs factures disponibles.\n\nj'ai fais 2000km en 10 ans.",
+  "dist": 443,
+  "cr": {
+   "rouille": "sain",
+   "moteur": "",
+   "ct": "attention",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "Châssis de refabrication. CT non à jour et défaut de frein à traiter, moteur non mentionné."
+  }
+ },
+ {
   "id": "3113515319",
   "titre": "Renault R4 1962",
   "url": "https://www.leboncoin.fr/ad/voitures/3113515319",
@@ -7404,6 +7617,31 @@
    "fourni": "",
    "raid": "",
    "raison": "Plancher à remplacer et rouille de surface ; châssis annoncé bon ; à restaurer intégralement."
+  }
+ },
+ {
+  "id": "3257589664",
+  "titre": "Renault 4l 1968",
+  "url": "https://www.leboncoin.fr/ad/voitures/3257589664",
+  "prix": 5500,
+  "ville": "Cressensac-Sarrazac",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "📄 Je vends ma Renault 4L de 1968, une véritable pièce de collection et un classique incontournable. Contrôle technique favorable réalisé le 22 juillet 2026 - Contrôle technique : Valide jusqu'en 05/2031 - Boîte de vitesses : Manuelle",
+  "desc": "Je vends ma Renault 4L de 1968, une véritable pièce de collection et un classique incontournable. Suivi par un garage spécialisé véhicules anciens.\nBon état. \nContrôle technique favorable réalisé le 22 juillet 2026\n- Marque : Renault\n- Modèle : 4L\n- Année : 1968\n- type : R1120\n- Kilométrage : 33 470 km\n- Motorisation : 4 Ch\n- Carburant : Essence\n- Boîte de vitesses : Manuelle\n- Couleur : verte\n- Puissance fiscale : 4 Cv\n- Contrôle technique : Valide jusqu'en 05/2031\n\nN'hésitez pas à me contacter pour plus d'informations ou pour organiser une visite.",
+  "dist": 634,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "2026",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "CT favorable réalisé le 22/07/2026, valide jusqu'en 05/2031. Aucun détail sur rouille ou moteur."
   }
  },
  {
@@ -7607,6 +7845,31 @@
   }
  },
  {
+  "id": "3257580914",
+  "titre": "Renault R4 4L F6 Fourgonette",
+  "url": "https://www.leboncoin.fr/ad/voitures/3257580914",
+  "prix": 3200,
+  "ville": "Cucq",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "⚠️ (27/08) : Renault R4 4L F6 Fourgonette 1981 à Cucq, 78 100 km, vendue AVEC CONTRE-VISITE — « pour bricoleur », plusieurs réparations à faire (cf CT), clignotants AV + embrayage faits. 3 200 € à débattre. → Fourgonnette F6 mais travaux à prévoir → vérifier l'ampleur avant d'envisager.",
+  "desc": "Renault R4 4L F6 Fourgonette\n\nPour bricoleur car des travaux sont à prévoir (cf CT)\n\n- Marque : Renault\n- Modèle : 4CV\n- Année : 1981\n- Kilométrage : 78 100 km (évolutif) \n- Carburant : Essence\n- Boîte de vitesses : Manuelle\n- Type de véhicule : Fourgonnette\n\n* Frais effectués : \nClignotants avant, embrayage \n* Véhicule pour bricoleur car plusieurs réparations sont à faire (cf contrôle technique). \n* Vendu AVEC une contre visite donc avec frais a prevoir\n\n3200€ à débattre \n\nN'hésitez pas à me contacter pour plus de photos.",
+  "dist": 102,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "attention",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "Vendue avec contre-visite et travaux à prévoir. Aucune précision sur rouille ou moteur."
+  }
+ },
+ {
   "id": "3246824436",
   "titre": "Renault 4l",
   "url": "https://www.leboncoin.fr/ad/voitures/3246824436",
@@ -7782,6 +8045,31 @@
   }
  },
  {
+  "id": "3256621182",
+  "titre": "Renault 4L TL – 1981 – 112 000 km",
+  "url": "https://www.leboncoin.fr/ad/voitures/3256621182",
+  "prix": 4500,
+  "ville": "Saint-Jean-d'Illac",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "📄 La voiture reste une bonne base pour profiter d’une 4L authentique, que ce soit pour une utilisation loisir, collection ou pour un projet de remise en état.",
+  "desc": "Renault 4L TL – 1981 – 112 000 km\n\nÀ vendre Renault 4L TL de 1981, avec 112 000 km.\n\nElle est équipée de sa peinture verte d’origine, ce qui lui donne un joli cachet et conserve son aspect authentique.\n\nLa voiture est en bon état général pour son âge et présente quelques défauts liés à ses années :\n\n* quelques points de rouille sur la carrosserie\n* sièges intérieurs abîmés\n* quelques imperfections esthétiques\n\nLa voiture reste une bonne base pour profiter d’une 4L authentique, que ce soit pour une utilisation loisir, collection ou pour un projet de remise en état.\n\nCaractéristiques :\n\n* Renault 4L TL\n* Année : 1981\n* Kilométrage : 112 000 km\n* Peinture verte d’origine\n* Véhicule ancien / collection\n* Carte grise : ok\n* Contrôle technique : à refaire. \n\nPrix : 4 500 €\n\nPrix à discuter raiso",
+  "dist": 708,
+  "cr": {
+   "rouille": "legere",
+   "moteur": "",
+   "ct": "avenir",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "Quelques points de rouille sur carrosserie sans perforation. CT à refaire."
+  }
+ },
+ {
   "id": "3145294409",
   "titre": "Renault 4l clan 1992 ct ok",
   "url": "https://www.leboncoin.fr/ad/voitures/3145294409",
@@ -7804,6 +8092,31 @@
    "fourni": "",
    "raid": "",
    "raison": "CT favorable de novembre 2025 ; plancher à réadapter et compteur bloqué ; sellerie à reprendre."
+  }
+ },
+ {
+  "id": "3255919312",
+  "titre": "Renault 4L",
+  "url": "https://www.leboncoin.fr/ad/voitures/3255919312",
+  "prix": 4200,
+  "ville": "Perpignan",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "📄 Le CT a depasser la date limite mais il etait ok donc pas de soucis Carte grise a mon nom",
+  "desc": "Vend renault 4L\nAnnee 1979\nKilometrage 176500 au compteur\nJantes alu 5 alpine \nPneus neuf\nEntretiens a jours\nDemarre et roule parfaitement\nCarte grise a mon nom\nLe CT a depasser la date limite mais il etait ok donc pas de soucis \nVendu en l etat",
+  "dist": 882,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "attention",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "CT dépassé bien qu'ok auparavant, vendue en l'état. Peu de précisions sur rouille ou moteur."
   }
  },
  {
@@ -7904,6 +8217,31 @@
    "fourni": "",
    "raid": "",
    "raison": "Jamais participé au Trophy mais prête pour raid ; pas de corrosion ; moteur restauré en 2022 ; équipement complet ; CT ok."
+  }
+ },
+ {
+  "id": "3255243005",
+  "titre": "Renault 4l",
+  "url": "https://www.leboncoin.fr/ad/voitures/3255243005",
+  "prix": 5200,
+  "ville": "Mimizan",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "(27/08) : Renault 4L 1986 à Mimizan, MOTEUR REMPLACÉ à 110 000 km (actuel 68 000), châssis sain ✓, CT valide jusqu'à 02/2028, toit ouvrant Twingo installé, ancien véhicule EDF. ⚠️ Sellerie avant à revoir. 5 200 €. → Moteur quasi neuf, châssis sain : base sérieuse mais prix haut.",
+  "desc": "Je vends ma Renault 4L de 1986, véritable icône automobile française avec 178 000 km au compteur.\n\n- Marque : Renault\n- Modèle : 4L\n- Année : 1986\n- Kilométrage : 178 000 km\n- Moteur remplacé à 110.000Km (moteur actuel 68,000km)\n- Couleur : Bleu\n- Nombre de portes : 5\n- Nombre de places : 5\n- Puissance fiscale : 4 Cv\n- Contrôle technique : Valide jusqu'en 02/2028\n- Ancien véhicule commercial EDF\n\n- Toit ouvrant de Twingo installé: étanchéité parfaite.\n- châssis sain\n\nScellerie avant à revoir \nAchetée il y a quelques mois, roule tous les jours, vendue pour autre projet.",
+  "dist": 784,
+  "cr": {
+   "rouille": "sain",
+   "moteur": "neuf",
+   "ct": "valide",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "Châssis sain, moteur remplacé. CT valide jusqu'en 02/2028. Toit ouvrant Twingo installé."
   }
  },
  {
@@ -8857,6 +9195,31 @@
   }
  },
  {
+  "id": "3255674304",
+  "titre": "Vends 4L Fourgonnette F6",
+  "url": "https://www.leboncoin.fr/ad/voitures/3255674304",
+  "prix": 4800,
+  "ville": "Orléans",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": false,
+  "notes": "(27/08) : Vends 4L Fourgonnette F6 à Orléans — bon état général, suivi mécanique régulier, 20 points de contrôle vérifiés le 30/01/2026 (garage certifié, facture dispo), 2 pneus AV neufs, batterie 2025, courroie révisée 2026, stationnée en garage 24h/24, « aucun frais à prévoir ». 4 800 €. → F6 correcte, à voir mais moteur à préciser.",
+  "desc": "Bon état général du véhicule avec \nun suivi mécanique régulier.\n20 points de contrôle vérifiés le 30/01/2026\npar garage certifié(facture disponible)\n2 pneus avant neufs, batterie changée en 2025, courroie révisée en 2026 (factures disponibles)\nVéhicule stationné en garage 24h/24.\nAucun frais à prévoir.\n\nVéhicule visible sur Orléans.\nPersonne non réellement intéressée s’abstenir.",
+  "dist": 314,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "Bon état général, suivi mécanique régulier, aucun frais à prévoir. Aucun détail sur rouille, moteur, CT ou raid."
+  }
+ },
+ {
   "id": "3229626446",
   "titre": "Renault 4 1985",
   "url": "https://www.leboncoin.fr/ad/voitures/3229626446",
@@ -9107,6 +9470,31 @@
   }
  },
  {
+  "id": "3256652728",
+  "titre": "Renault 4l",
+  "url": "https://www.leboncoin.fr/ad/voitures/3256652728",
+  "prix": 5990,
+  "ville": "Yvetot",
+  "vendeur": "—",
+  "conv": "",
+  "date": "",
+  "msg": "—",
+  "statut": "attente",
+  "prep": true,
+  "notes": "📄 A commencé à être préparée pour le 4l trophy mais ne l’a jamais fait Crochet d’attelage Bon état général",
+  "desc": "Bon état général \nCrochet d’attelage \nRoule très bien \nCT ok\nF4\nA commencé à être préparée pour le 4l trophy mais ne l’a jamais fait \nDémarrage électrique",
+  "dist": 199,
+  "cr": {
+   "rouille": "",
+   "moteur": "",
+   "ct": "valide",
+   "equip": "",
+   "fourni": "",
+   "raid": "",
+   "raison": "CT ok, crochet d'attelage. Commencée à être préparée pour le Trophy mais n'a jamais fait de raid."
+  }
+ },
+ {
   "id": "3103402048",
   "titre": "Renault 4tl",
   "url": "https://www.leboncoin.fr/ad/voitures/3103402048",
@@ -9241,7 +9629,7 @@ function cellHTML(k, r) {
   return "";
 }
 
-function filtrer() {
+function rendu() {
   const q = $("fSearch").value.toLowerCase();
   const st = $("fStatut").value, pr = $("fPrep").value;
   const pmin = parseFloat($("fPmin").value) || 0, pmax = parseFloat($("fPmax").value) || Infinity;
@@ -9263,11 +9651,6 @@ function filtrer() {
   else if (tri === "prix_desc") rows.sort((a,b) => -triComparer(a,b,"prix"));
   else if (tri === "prep") rows.sort((a,b) => (b.prep?1:0) - (a.prep?1:0) || -triComparer(a,b,"date"));
   if (colSort) rows.sort((a,b) => colSort.dir * triComparer(a,b,colSort.k));
-  return rows;
-}
-
-function rendu() {
-  const rows = filtrer();
 
   const vis = colOrder.filter(k => !hiddenCols.has(k));
   const ths = vis.map(k => {
@@ -9350,138 +9733,7 @@ COLS.forEach(c => {
 ["fSearch","fStatut","fPrep","fPmin","fPmax","fTri"].forEach(id =>
   $(id).addEventListener("input", () => { colSort = null; rendu(); }));
 
-// --- carte interactive (OpenStreetMap + Leaflet) ---
-const GEO = (window.GEO_VILLES || {});
-DATA.forEach(r => { r.geo = GEO[r.ville] || null; });
-
-const COLOR_STATUT = { attente: "#38bdf8", reponse: "#22c55e", appel: "#f59e0b", horsjeu: "#64748b" };
-let map = null, markerLayer = null;
-
-function initMap() {
-  if (map) return;
-  map = L.map("map", { zoomControl: true }).setView([46.6, 2.4], 6);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  }).addTo(map);
-  markerLayer = L.layerGroup().addTo(map);
-}
-
-function badgeCls(k, v) {
-  const html = badgeCrit(k, v);
-  if (html.includes("horsjeu")) return "b-horsjeu";
-  if (html.includes("appel")) return "b-appel";
-  return "b-reponse";
-}
-
-function popupHTML(r) {
-  const prix = r.prix ? r.prix.toLocaleString("fr-FR") + " €" : "n.c.";
-  const cr = r.cr || {};
-  const crBadges = ["rouille","moteur","ct","equip","fourni","raid"]
-    .filter(k => (cr[k] || ""))
-    .map(k => `<span class="badge ${badgeCls(k, cr[k])}">${esc(k)}: ${esc(cr[k])}</span>`).join("");
-  const statutBadge = `<span class="badge b-${r.statut}">${STATUT_LABEL[r.statut] || r.statut}</span>`;
-  const prepBadge = r.prep ? '<span class="badge b-prep">🏁 préparée</span>' : '';
-  const convLink = r.conv ? `<a class="conv" href="${r.conv}" target="_blank">💬 Conv</a>` : '';
-  const notes = r.notes && r.notes !== "—" ? `<div class="notes">${esc(r.notes)}</div>` : "";
-  const vendeur = r.vendeur && r.vendeur !== "—" ? `<div class="row"><span>👤 Vendeur</span><b>${esc(r.vendeur)}</b></div>` : "";
-  return `<div class="map-pop">
-    <div class="t">${esc(r.titre)}</div>
-    <div class="prix">${prix}</div>
-    <div class="badges">${statutBadge}${prepBadge}${crBadges}</div>
-    <div class="row"><span>📍 Ville</span><b>${esc(r.ville || "—")}</b></div>
-    <div class="row"><span>📏 Dist. Lille</span><b>${r.dist ? r.dist + " km" : "—"}</b></div>
-    ${vendeur}
-    ${notes}
-    <div class="lien">
-      <a class="annonce" href="${r.url}" target="_blank">Voir l'annonce ↗</a>
-      ${convLink}
-    </div>
-  </div>`;
-}
-
-function renduCarte() {
-  if (!markerLayer) return;
-  markerLayer.clearLayers();
-  const rows = filtrer();
-  const bounds = [];
-  rows.forEach(r => {
-    if (!r.geo) return;
-    const [lat, lon] = r.geo;
-    const col = COLOR_STATUT[r.statut] || "#38bdf8";
-    const mk = L.circleMarker([lat, lon], {
-      radius: r.prep ? 10 : 7,
-      color: "#0f1420",
-      weight: 2,
-      fillColor: col,
-      fillOpacity: 0.85,
-      title: r.titre
-    });
-    mk.bindPopup(popupHTML(r), { maxWidth: 320 });
-    mk.addTo(markerLayer);
-    bounds.push([lat, lon]);
-  });
-  if (bounds.length && map) {
-    map.fitBounds(bounds, { padding: [30, 30], maxZoom: 9 });
-  }
-}
-
-// --- bascule Tableau / Carte ---
-function setView(v) {
-  const t = v === "map";
-  document.body.classList.toggle("mode-map", t);
-  $("viewTable").style.display = t ? "none" : "block";
-  $("viewMap").style.display = t ? "block" : "none";
-  $("viewBtnTable").classList.toggle("active", !t);
-  $("viewBtnMap").classList.toggle("active", t);
-  if (t) {
-    initMap();
-    setTimeout(() => { if (map) map.invalidateSize(); }, 10);
-    renduCarte();
-  }
-}
-// La carte est la vue par défaut (surtout sur mobile)
-$("viewBtnTable").addEventListener("click", () => setView("table"));
-$("viewBtnMap").addEventListener("click", () => setView("map"));
-
-// synchroniser la carte quand les filtres changent
-const _origRendu = rendu;
-rendu = function() {
-  _origRendu();
-  renduCarte();
-};
-
-// --- Panneau filtres mobile (bouton flottant ⚙️) ---
-(function () {
-  var fab = document.getElementById("fabFilters");
-  var tools = document.querySelector(".tools");
-  if (!fab || !tools) return;
-  function toggle(force) {
-    var open = typeof force === "boolean" ? force : !tools.classList.contains("open");
-    tools.classList.toggle("open", open);
-    fab.textContent = open ? "✕" : "⚙️";
-  }
-  // bouton "Fermer" injecté dans le panneau
-  var closeBtn = document.createElement("button");
-  closeBtn.type = "button";
-  closeBtn.className = "tools-open-btn";
-  closeBtn.textContent = "Appliquer et fermer";
-  closeBtn.addEventListener("click", function () { toggle(false); });
-  tools.appendChild(closeBtn);
-  // la touche Échap ferme le panneau
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") toggle(false);
-  });
-  fab.addEventListener("click", function () { toggle(); });
-  // se referme quand on bascule de vue
-  window.addEventListener("resize", function () {
-    if (window.innerWidth > 768) toggle(false);
-  });
-})();
-
-// Rendu du tableau d'abord (pour les compteurs), puis bascule sur la carte
 rendu();
-setView("map");
 </script>
 </body>
 </html>
