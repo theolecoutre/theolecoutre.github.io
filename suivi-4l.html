@@ -135,6 +135,10 @@
   body.mode-map #map { width: 100%; height: calc(100vh - 190px); min-height: 480px; }
 
 /* Marqueur prix sur la carte */
+.pm-wrap {
+  position: absolute;
+  z-index: 800;
+}
 .prix-marker {
   font-family: inherit;
   font-size: 11px;
@@ -12050,6 +12054,7 @@ window.SUIVI_4L = [
 
 
 
+
 <script>
 const DATA = (window.SUIVI_4L || []).map(r => ({ ...r }));
 const $ = id => document.getElementById(id);
@@ -12348,7 +12353,7 @@ function renduCarte() {
     const prixTxt = r.prix ? prixFmt(r.prix) : "—";
     // Marqueur avec le prix affiché directement sur la carte
     const icon = L.divIcon({
-      className: "",
+      className: "pm-wrap",
       html: `<div class="prix-marker pm-${st}"><span class="pm-dot"></span>${prixTxt}</div>`,
       iconSize: [0, 0],
       iconAnchor: [0, 0]
